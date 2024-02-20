@@ -34,7 +34,7 @@ module "route_table" {
   ]
 }
 
-module "main_route_table" {
+module "main_route_table_association" {
   for_each         = { for mrt in var.mrt : mrt.route_table_id => mrt }
   source           = "../modules/network"
   mrt = each.value
