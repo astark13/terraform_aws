@@ -34,6 +34,17 @@ module "route_table" {
   ]
 }
 
+module "main_route_table" {
+  for_each         = { for mrt in var.mrt : mrt.route_table_id => mrt }
+  source           = "../modules/network"
+  mrt = each.value
+  depends_on = [
+    module.vpc,
+    module.internet_gateway,
+    module.route_table
+  ]
+}
+
 # # module "default_route_table" {
 # #   for_each = { for drt in var.drt : drt.name => drt }
 # #   source   = "../modules/network"

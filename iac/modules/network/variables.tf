@@ -5,7 +5,7 @@
 variable "vpc" {
   type = object({
     cidr_block = string
-    tags = map(string)
+    tags       = map(string)
   })
   default = null
 }
@@ -29,19 +29,20 @@ variable "ig" {
   default = null
 }
 
-# variable "rt" {
-#   type = object({
-#     vpc_id = string
-#     tags   = map(string)
-#   })
-#   default = null
-# }
-
 variable "rt" {
   type = object({
     vpc_id = string
-    route = list(map(string))
+    route  = list(map(string))
     tags   = map(string)
+  })
+  default = null
+}
+
+#main_route_table
+variable "mrt" {
+  type = object({
+    vpc_id         = string
+    route_table_id = string
   })
   default = null
 }

@@ -47,21 +47,22 @@ variable "ig" {
   )
 }
 
-# variable "rt" {
-#   type = list(
-#     object({
-#       vpc_id = string
-#       tags   = map(string)
-#     })
-#   )
-# }
-
 variable "rt" {
   type = list(
     object({
       vpc_id = string
       route  = list(map(string))
       tags   = map(string)
+    })
+  )
+}
+
+#main_route_table
+variable "mrt" {
+  type = list(
+    object({
+      vpc_id         = string
+      route_table_id = string
     })
   )
 }
