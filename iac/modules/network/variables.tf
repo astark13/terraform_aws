@@ -1,7 +1,3 @@
-# variable "tags" {
-#   default = null
-# }
-
 variable "vpc" {
   type = object({
     cidr_block = string
@@ -21,6 +17,7 @@ variable "subnet" {
   default = null
 }
 
+#internet_gateway
 variable "ig" {
   type = object({
     vpc_id = string
@@ -29,6 +26,7 @@ variable "ig" {
   default = null
 }
 
+#route_table
 variable "rt" {
   type = object({
     vpc_id = string
@@ -47,6 +45,25 @@ variable "mrt" {
   default = null
 }
 
+#security_group
+variable "sg" {
+  type = object({
+    name = string
+    description = string
+    vpc_id = string
+  })
+  default = null
+}
+
+#default_security_group
+variable "dsg" {
+  type = object({
+    vpc_id = string  
+  })
+  default = null
+}
+
+#default_route_table
 variable "drt" {
   type = object({
     vpc_id = string
@@ -54,13 +71,7 @@ variable "drt" {
   default = null
 }
 
-variable "sg" {
-  type = object({
-    vpc_id = string
-  })
-  default = null
-}
-
+#elastic_ip
 variable "eip" {
   type = object({
     instance_id = string

@@ -35,9 +35,9 @@ module "route_table" {
 }
 
 module "main_route_table_association" {
-  for_each         = { for mrt in var.mrt : mrt.route_table_id => mrt }
-  source           = "../modules/network"
-  mrt = each.value
+  for_each = { for mrt in var.mrt : mrt.route_table_id => mrt }
+  source   = "../modules/network"
+  mrt      = each.value
   depends_on = [
     module.vpc,
     module.internet_gateway,
@@ -45,26 +45,14 @@ module "main_route_table_association" {
   ]
 }
 
-# # module "default_route_table" {
-# #   for_each = { for drt in var.drt : drt.name => drt }
-# #   source   = "../modules/network"
-# #   drt      = each.value
-# #   tags     = var.tags
-# #   depends_on = [
-# #     module.vpc,
-# #     module.internet_gateway
-# #   ]
-# # }
-
-# # module "default_security_group" {
-# #   for_each = { for sg in var.sg : sg.name => sg }
-# #   source   = "../modules/network"
-# #   sg       = each.value
-# #   tags     = var.tags
-# #   depends_on = [
-# #     module.vpc
-# #   ]
-# # }
+module "security_group" {
+  for_each = { for sg in var.sg : sg.name => sg }
+  source   = "../modules/network"
+  sg       = each.value
+  depends_on = [
+    module.vpc
+  ]
+}
 
 # module "launch_template" {
 #   for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }

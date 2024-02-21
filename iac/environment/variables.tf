@@ -79,8 +79,9 @@ variable "mrt" {
 variable "sg" {
   type = list(
     object({
-      name   = string
-      vpc_id = string
+      name        = string
+      description = string
+      vpc_id      = string
     })
   )
 }
