@@ -57,7 +57,7 @@ module "security_group" {
 module "security_group_rule" {
   for_each = { for sgr in var.sgr : sgr.description => sgr }
   source   = "../modules/network"
-  sgr       = each.value
+  sgr      = each.value
   depends_on = [
     module.security_group
   ]
