@@ -55,6 +55,20 @@ variable "sg" {
   default = null
 }
 
+#security_group_rule
+variable "sgr" {
+  type = object({
+    description       = string
+    type              = string
+    from_port         = number
+    to_port           = number
+    protocol          = string
+    cidr_block        = list(string)
+    security_group_id = string
+  })
+  default = null
+}
+
 #default_security_group
 variable "dsg" {
   type = object({

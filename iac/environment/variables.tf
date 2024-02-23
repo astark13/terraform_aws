@@ -76,12 +76,28 @@ variable "mrt" {
 #   )
 # }
 
+# security_group
 variable "sg" {
   type = list(
     object({
       name        = string
       description = string
       vpc_id      = string
+    })
+  )
+}
+
+#security_group_rule
+variable "sgr" {
+  type = list(
+    object({
+      description       = string
+      type              = string
+      from_port         = number
+      to_port           = number
+      protocol          = string
+      cidr_block        = list(string)
+      security_group_id = string
     })
   )
 }
