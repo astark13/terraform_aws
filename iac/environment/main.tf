@@ -24,6 +24,7 @@ module "internet_gateway" {
   ]
 }
 
+# this module needs the internet gateway id !!!
 module "route_table" {
   for_each = { for rt in var.rt : rt.tags.Name => rt }
   source   = "../modules/network"
@@ -34,6 +35,7 @@ module "route_table" {
   ]
 }
 
+# this module needs the route table id !!!
 module "main_route_table_association" {
   for_each = { for mrt in var.mrt : mrt.route_table_id => mrt }
   source   = "../modules/network"
@@ -54,6 +56,7 @@ module "security_group" {
   ]
 }
 
+# this module needs the security group id !!!
 module "security_group_rule" {
   for_each = { for sgr in var.sgr : sgr.description => sgr }
   source   = "../modules/network"
@@ -63,15 +66,15 @@ module "security_group_rule" {
   ]
 }
 
-# module "launch_template" {
-#   for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
-#   source          = "../modules/compute"
-#   launch_template = each.value
-#   tags            = var.tags
-#   depends_on = [
-#     module.default_security_group
-#   ]
-# }
+module "launch_template" {
+  for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
+  source          = "../modules/compute"
+  launch_template = each.value
+  #tags            = var.tags
+  depends_on = [
+    module.security_group
+  ]
+}
 
 # # # you need to specify the subnet_id in terraform.tfvars before running this module
 # # module "ec2" {

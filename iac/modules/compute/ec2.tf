@@ -4,5 +4,5 @@ resource "aws_instance" "web" {
   instance_type = var.ec2.instance_type
   subnet_id     = var.ec2.subnet_id
   user_data     = file("${path.module}/install_apache.sh")
-  tags          = var.tags
+  #tags          = var.tags
 }

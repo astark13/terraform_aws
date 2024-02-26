@@ -1,9 +1,17 @@
 resource "aws_launch_template" "terraform_lauch_template" {
-  count = var.launch_template == null ? 0 : 1
-  name = var.launch_template.name
-  image_id = var.launch_template.image_id
-  instance_type = var.launch_template.instance_type
+  count                  = var.launch_template == null ? 0 : 1
+  name                   = var.launch_template.name
+  image_id               = var.launch_template.image_id
+  instance_type          = var.launch_template.instance_type
   vpc_security_group_ids = var.launch_template.vpc_security_group_ids
-  #user_data = filebase64("${path.module}/example.sh")
-  tags          = var.tags
-}
+  #user_data              = filebase64("${path.module}/example.sh")
+  dynamic "tag_specifications" {
+    for_each = var.launch_template.tag_specifications
+    content {
+      # available resource types values:
+      # instance | volume | network-interface | spot-instances-request
+      resource_type = tag_specifications.value.resource_type
+      tags= tag_specifications.value.tags
+    }
+  } 
+}  

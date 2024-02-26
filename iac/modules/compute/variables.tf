@@ -12,10 +12,21 @@ variable "launch_template" {
     image_id               = string
     instance_type          = string
     vpc_security_group_ids = set(string)
+   #user_data              = string
+    tag_specifications     = list(
+      object({
+      # available resource types values:
+      # instance | volume | network-interface | spot-instances-request
+      resource_type = string
+      # a map of tags to assign to the launch template
+      tags          = map(string)
+      })
+    )
+  #default = null
   })
   default = null
-}
+} 
 
-variable "tags" {
-  default = null
-}
+# variable "tags" {
+#   default = null
+# }
