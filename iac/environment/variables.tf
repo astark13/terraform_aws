@@ -109,7 +109,8 @@ variable "launch_template" {
       image_id               = string
       instance_type          = string
       vpc_security_group_ids = set(string)
-      tag_specifications = list(
+      user_data              = string
+      tag_specifications     = list(
         object({
           # tags to apply to the resources during launch
           resource_type = string

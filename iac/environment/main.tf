@@ -70,7 +70,6 @@ module "launch_template" {
   for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
   source          = "../modules/compute"
   launch_template = each.value
-  #tags            = var.tags
   depends_on = [
     module.security_group
   ]

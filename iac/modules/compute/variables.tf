@@ -12,7 +12,7 @@ variable "launch_template" {
     image_id               = string
     instance_type          = string
     vpc_security_group_ids = set(string)
-   #user_data              = string
+    user_data              = string
     tag_specifications     = list(
       object({
       # available resource types values:

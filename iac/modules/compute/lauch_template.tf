@@ -4,7 +4,7 @@ resource "aws_launch_template" "terraform_lauch_template" {
   image_id               = var.launch_template.image_id
   instance_type          = var.launch_template.instance_type
   vpc_security_group_ids = var.launch_template.vpc_security_group_ids
-  #user_data              = filebase64("${path.module}/example.sh")
+  user_data              = filebase64("${path.module}/${var.launch_template.user_data}")
   dynamic "tag_specifications" {
     for_each = var.launch_template.tag_specifications
     content {
