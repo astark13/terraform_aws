@@ -99,9 +99,3 @@ module "launch_template" {
 # #     module.ec2
 # #   ]
 # # }
-
-# # # # # # resource "aws_launch_template" "lt_linux_t2_micro" {
-# # # # # #   name          = "linux_t2_micro"
-# # # # # #   image_id      = "ami-04376654933b081a7"
-# # # # # #   instance_type = "t2.micro"
-# # # # # # }
