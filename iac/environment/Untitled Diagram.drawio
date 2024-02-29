@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-02-29T11:16:25.413Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0" etag="w2Oym5bVj3YNIcmG-Cz-" version="23.1.5" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-29T12:55:59.952Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0" etag="sRdk22yEQoG1oeB9_mXe" version="23.1.5" type="github">
   <diagram name="Page-1" id="GdwxHHWVY4ONJSW4Utfn">
-    <mxGraphModel dx="1434" dy="754" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    <mxGraphModel dx="1050" dy="539" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -99,7 +99,7 @@
         <mxCell id="uvZQzfDUZV-FZ5usibHW-43" value="" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;" vertex="1" parent="uvZQzfDUZV-FZ5usibHW-2">
           <mxGeometry x="874.22" y="10" width="53" height="53" as="geometry" />
         </mxCell>
-        <mxCell id="uvZQzfDUZV-FZ5usibHW-44" value="For the EC2 instance you can choose an AMI image that already has the SSM agent installed" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="uvZQzfDUZV-FZ5usibHW-2">
+        <mxCell id="uvZQzfDUZV-FZ5usibHW-44" value="For the EC2 instance you can choose an &lt;b&gt;AMI image that already has the SSM agent installed&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="uvZQzfDUZV-FZ5usibHW-2">
           <mxGeometry x="937" y="10" width="220" height="55" as="geometry" />
         </mxCell>
         <mxCell id="uvZQzfDUZV-FZ5usibHW-39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="uvZQzfDUZV-FZ5usibHW-34">
