@@ -35,9 +35,9 @@ module "eip" {
 }
 
 module "nat_gateway" {
-  for_each   = { for ngw in var.ngw : ngw.tags.Name => ngw }
-  source     = "../modules/network"
-  ngw        = each.value
+  for_each = { for ngw in var.ngw : ngw.tags.Name => ngw }
+  source   = "../modules/network"
+  ngw      = each.value
   depends_on = [
     module.internet_gateway,
     module.eip
@@ -59,7 +59,7 @@ module "route_table" {
 module "route_table_association" {
   for_each = { for rta in var.rta : rta.subnet_id => rta }
   source   = "../modules/network"
-  rta       = each.value
+  rta      = each.value
   depends_on = [
     module.route_table
   ]

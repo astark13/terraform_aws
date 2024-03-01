@@ -84,8 +84,8 @@ variable "rt" {
 variable "rta" {
   type = list(
     object({
-      subnet_id = string
-      route_table_id  = string
+      subnet_id      = string
+      route_table_id = string
     })
   )
 }
@@ -120,7 +120,7 @@ variable "iam_role" {
   type = list(
     object({
       name = string
-      tags = map(string)       
+      tags = map(string)
     })
   )
 }
@@ -153,14 +153,14 @@ variable "launch_template" {
       instance_type          = string
       vpc_security_group_ids = set(string)
       user_data              = string
-      tag_specifications     = list(
+      tag_specifications = list(
         object({
           # tags to apply to the resources during launch
           resource_type = string
           # a map of tags to assign to the launch template
           tags = map(string)
         })
-      )  
+      )
     })
   )
 }
