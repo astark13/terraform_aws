@@ -116,6 +116,15 @@ variable "sgr" {
   )
 }
 
+variable "iam_role" {
+  type = list(
+    object({
+      name = string
+      tags = map(string)       
+    })
+  )
+}
+
 
 # main_route_table
 variable "mrt" {

@@ -84,12 +84,18 @@ module "security_group_rule" {
   ]
 }
 
+module "iam_role" {
+  for_each = { for iam_role in var.iam_role : iam_role.name => iam_role }
+  source   = "../modules/iam"
+  iam_role = each.value
+}
 
 # # this module needs the route table id !!!
 # It's important to note that a VPC can have multiple route tables,
 # but only one main route table. While additional route tables
 # can be associated with specific subnets,
 # the main route table remains the default route table for all non-specified subnets.
+
 # module "main_route_table_association" {
 #   for_each = { for mrt in var.mrt : mrt.route_table_id => mrt }
 #   source   = "../modules/network"
