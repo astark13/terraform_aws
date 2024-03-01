@@ -26,6 +26,26 @@ variable "ig" {
   default = null
 }
 
+#elastic_ip
+variable "eip" {
+  type = object({
+    domain = string
+    tags   = map(string)
+  })
+  default = null
+}
+
+
+#nat_gateway
+variable "ngw" {
+  type = object({
+    allocation_id = string
+    subnet_id     = string
+    tags          = map(string)
+  })
+  default = null
+}
+
 #route_table
 variable "rt" {
   type = object({
@@ -36,11 +56,11 @@ variable "rt" {
   default = null
 }
 
-#main_route_table
-variable "mrt" {
+#route_table_association
+variable "rta" {
   type = object({
-    vpc_id         = string
-    route_table_id = string
+    subnet_id       = string
+    route_table_id  = string
   })
   default = null
 }
@@ -48,9 +68,9 @@ variable "mrt" {
 #security_group
 variable "sg" {
   type = object({
-    name = string
+    name        = string
     description = string
-    vpc_id = string
+    vpc_id      = string
   })
   default = null
 }
@@ -65,6 +85,15 @@ variable "sgr" {
     protocol          = string
     cidr_block        = list(string)
     security_group_id = string
+  })
+  default = null
+}
+
+#main_route_table
+variable "mrt" {
+  type = object({
+    vpc_id         = string
+    route_table_id = string
   })
   default = null
 }
@@ -84,12 +113,3 @@ variable "drt" {
   })
   default = null
 }
-
-#elastic_ip
-variable "eip" {
-  type = object({
-    instance_id = string
-  })
-  default = null
-}
-

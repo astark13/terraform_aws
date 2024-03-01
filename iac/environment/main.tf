@@ -24,6 +24,26 @@ module "internet_gateway" {
   ]
 }
 
+# you need to specify the instance_id terraform.tfvars before running this module
+module "eip" {
+  for_each = { for eip in var.eip : eip.tags.Name => eip }
+  source   = "../modules/network"
+  eip      = each.value
+  depends_on = [
+    module.vpc
+  ]
+}
+
+module "nat_gateway" {
+  for_each   = { for ngw in var.ngw : ngw.tags.Name => ngw }
+  source     = "../modules/network"
+  ngw        = each.value
+  depends_on = [
+    module.internet_gateway,
+    module.eip
+  ]
+}
+
 # this module needs the internet gateway id !!!
 module "route_table" {
   for_each = { for rt in var.rt : rt.tags.Name => rt }
@@ -35,14 +55,12 @@ module "route_table" {
   ]
 }
 
-# this module needs the route table id !!!
-module "main_route_table_association" {
-  for_each = { for mrt in var.mrt : mrt.route_table_id => mrt }
+# this module needs the internet gateway id !!!
+module "route_table_association" {
+  for_each = { for rta in var.rta : rta.subnet_id => rta }
   source   = "../modules/network"
-  mrt      = each.value
+  rta       = each.value
   depends_on = [
-    module.vpc,
-    module.internet_gateway,
     module.route_table
   ]
 }
@@ -66,36 +84,43 @@ module "security_group_rule" {
   ]
 }
 
-module "launch_template" {
-  for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
-  source          = "../modules/compute"
-  launch_template = each.value
-  depends_on = [
-    module.security_group
-  ]
-}
 
-# # # you need to specify the subnet_id in terraform.tfvars before running this module
-# # module "ec2" {
-# #   for_each = { for ec2 in var.ec2 : ec2.name => ec2 }
-# #   source   = "../modules/compute"
-# #   ec2      = each.value
-# #   tags     = var.tags
-# #   depends_on = [
-# #     module.vpc,
-# #     module.subnet,
-# #     module.internet_gateway,
-# #     module.default_route_table,
-# #     module.default_security_group ]
-# # }
+# # this module needs the route table id !!!
+# It's important to note that a VPC can have multiple route tables,
+# but only one main route table. While additional route tables
+# can be associated with specific subnets,
+# the main route table remains the default route table for all non-specified subnets.
+# module "main_route_table_association" {
+#   for_each = { for mrt in var.mrt : mrt.route_table_id => mrt }
+#   source   = "../modules/network"
+#   mrt      = each.value
+#   depends_on = [
+#     module.vpc,
+#     module.internet_gateway,
+#     module.route_table
+#   ]
+# }
 
-# # # you need to specify the instance_id terraform.tfvars before running this module
-# # module "eip" {
-# #   for_each = { for eip in var.eip : eip.instance_id => eip }
-# #   source   = "../modules/network"
-# #   eip      = each.value
-# #   tags     = var.tags
-# #   depends_on = [
-# #     module.ec2
-# #   ]
-# # }
+# module "launch_template" {
+#   for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
+#   source          = "../modules/compute"
+#   launch_template = each.value
+#   depends_on = [
+#     module.security_group
+#   ]
+# }
+
+# # # # you need to specify the subnet_id in terraform.tfvars before running this module
+# # # module "ec2" {
+# # #   for_each = { for ec2 in var.ec2 : ec2.name => ec2 }
+# # #   source   = "../modules/compute"
+# # #   ec2      = each.value
+# # #   tags     = var.tags
+# # #   depends_on = [
+# # #     module.vpc,
+# # #     module.subnet,
+# # #     module.internet_gateway,
+# # #     module.default_route_table,
+# # #     module.default_security_group ]
+# # # }
+

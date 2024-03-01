@@ -1,4 +1,4 @@
-resource "aws_security_group" "default" {
+resource "aws_security_group" "example" {
   count       = var.sg == null ? 0 : 1
   name        = var.sg.name
   description = var.sg.description

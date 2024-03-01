@@ -38,6 +38,7 @@ variable "subnet" {
   )
 }
 
+# internet_gateway
 variable "ig" {
   type = list(
     object({
@@ -47,6 +48,28 @@ variable "ig" {
   )
 }
 
+# elastic_ip
+variable "eip" {
+  type = list(
+    object({
+      domain = string
+      tags   = map(string)
+    })
+  )
+}
+
+# nat_gateway
+variable "ngw" {
+  type = list(
+    object({
+      allocation_id = string
+      subnet_id     = string
+      tags          = map(string)
+    })
+  )
+}
+
+# route_table
 variable "rt" {
   type = list(
     object({
@@ -57,24 +80,15 @@ variable "rt" {
   )
 }
 
-#main_route_table
-variable "mrt" {
+# route_table_association
+variable "rta" {
   type = list(
     object({
-      vpc_id         = string
-      route_table_id = string
+      subnet_id = string
+      route_table_id  = string
     })
   )
 }
-
-# variable "drt" {
-#   type = list(
-#     object({
-#       name   = string
-#       vpc_id = string
-#     })
-#   )
-# }
 
 # security_group
 variable "sg" {
@@ -101,6 +115,26 @@ variable "sgr" {
     })
   )
 }
+
+
+# main_route_table
+variable "mrt" {
+  type = list(
+    object({
+      vpc_id         = string
+      route_table_id = string
+    })
+  )
+}
+
+# variable "drt" {
+#   type = list(
+#     object({
+#       name   = string
+#       vpc_id = string
+#     })
+#   )
+# }
 
 variable "launch_template" {
   type = list(
@@ -129,14 +163,6 @@ variable "ec2" {
       ami           = string
       instance_type = string
       subnet_id     = string
-    })
-  )
-}
-
-variable "eip" {
-  type = list(
-    object({
-      instance_id = string
     })
   )
 }
