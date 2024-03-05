@@ -121,6 +121,7 @@ variable "iam_role" {
     object({
       name = string
       tags = map(string)
+      policy_arn = set(string)
     })
   )
 }

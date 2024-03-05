@@ -84,11 +84,11 @@
 #   ]
 # }
 
-# module "iam_role" {
-#   for_each = { for iam_role in var.iam_role : iam_role.name => iam_role }
-#   source   = "../modules/iam"
-#   iam_role = each.value
-# }
+module "iam_role" {
+  for_each = { for iam_role in var.iam_role : iam_role.name => iam_role }
+  source   = "../modules/iam"
+  iam_role = each.value
+}
 
 # # # this module needs the route table id !!!
 # # It's important to note that a VPC can have multiple route tables,
