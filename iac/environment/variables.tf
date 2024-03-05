@@ -152,6 +152,7 @@ variable "launch_template" {
       image_id               = string
       instance_type          = string
       vpc_security_group_ids = set(string)
+      iam_instance_profile   = string
       user_data              = string
       tag_specifications = list(
         object({

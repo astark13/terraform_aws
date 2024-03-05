@@ -13,6 +13,7 @@ variable "launch_template" {
     instance_type          = string
     vpc_security_group_ids = set(string)
     user_data              = string
+    iam_instance_profile   = string
     tag_specifications     = list(
       object({
       # available resource types values:
