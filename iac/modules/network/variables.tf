@@ -12,6 +12,7 @@ variable "subnet" {
     availability_zone = string
     newbits           = number
     netnum            = number
+    map_public_ip_on_launch = bool
     tags              = map(string)
   })
   default = null

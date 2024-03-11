@@ -6,6 +6,7 @@ variable "ec2" {
   })
   default = null
 }
+
 variable "launch_template" {
   type = object({
     name                   = string
@@ -23,10 +24,40 @@ variable "launch_template" {
       tags          = map(string)
       })
     )
-  #default = null
   })
   default = null
 } 
+
+# ec2_with_launch_template
+variable "ec2lt" {
+  type = object({
+    subnet_id          = string
+    launch_template_id = string
+    tags               = map(string)
+  })
+  default = null
+}
+
+# autoscaling_group
+variable "asg" {
+  type = object({
+    name                = string
+    vpc_zone_identifier = list(string)
+    desired_capacity    = number
+    max_size            = number
+    min_size            = number
+    launch_template_id  = string
+    tag = list(
+      object({
+        key                 = string
+        value               = string
+        propagate_at_launch = bool 
+      })
+    )  
+  })
+  default = null
+}
+
 
 # variable "tags" {
 #   default = null

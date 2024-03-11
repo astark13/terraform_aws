@@ -21,8 +21,9 @@ resource "aws_iam_role" "tf_role" {
   tags = var.iam_role.tags
 }
 
-resource "aws_iam_role_policy_attachment" "test-attach" {
-  for_each   = var.iam_role.policy_arn
-  role       = var.iam_role.name
-  policy_arn = each.value
-}
+# resource "aws_iam_role_policy_attachment" "test-attach" {
+#   for_each   = var.iam_role.policy_arn
+#   role       = var.iam_role.name
+#   policy_arn = each.value
+#   depends_on = [ aws_iam_role.tf_role ]
+# }

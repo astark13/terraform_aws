@@ -13,5 +13,6 @@ resource "aws_subnet" "subnet" {
   vpc_id            = data.aws_vpc.subnet[0].id
   availability_zone = var.subnet.availability_zone
   cidr_block        = cidrsubnet(data.aws_vpc.subnet[0].cidr_block, var.subnet.newbits, var.subnet.netnum)
+  map_public_ip_on_launch = var.subnet.map_public_ip_on_launch
   tags              = var.subnet.tags
 }

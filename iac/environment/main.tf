@@ -90,6 +90,80 @@ module "iam_role" {
   iam_role = each.value
 }
 
+resource "aws_iam_role_policy_attachment" "test-attach" {
+  for_each   = var.iam_rpa.policy_arn
+  role       = var.iam_rpa.role
+  policy_arn = each.value
+  depends_on = [module.iam_role]
+}
+
+# module "iam_role_policy_attachment" {
+#   for_each = { for iam_z in var.iam_z : iam_z.role => iam_z }
+#   source   = "../modules/iam"
+#   iam_z  = each.value
+# }
+
+# iam_instance_profile
+module "iam_i_p" {
+  for_each = { for iam_i_p in var.iam_i_p : iam_i_p.name => iam_i_p }
+  source   = "../modules/iam"
+  iam_i_p  = each.value
+  depends_on = [
+    module.iam_role
+  ]
+}
+
+# if you want to assign a role to an EC2 instance,
+# you need to create a "iam_instance_profile" first!!!
+module "launch_template" {
+  for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
+  source          = "../modules/compute"
+  launch_template = each.value
+  # depends_on = [
+  #   module.security_group
+  # ]
+}
+
+# you need to specify the subnet_id and launch_template_id in terraform.tfvars
+# before running this module which creates an EC2 instance using a launch template
+module "ec2lt" {
+  for_each = { for ec2lt in var.ec2lt : ec2lt.tags.Name => ec2lt }
+  source   = "../modules/compute"
+  ec2lt    = each.value
+  # tags     = var.tags
+  depends_on = [
+    module.launch_template
+    #   module.vpc,
+    #   module.subnet,
+    #   module.internet_gateway,
+    #   module.default_route_table,
+    #   module.default_security_group 
+  ]
+}
+
+module "autoscaling_group" {
+  for_each = { for asg in var.asg : asg.name => asg }
+  source   = "../modules/compute"
+  asg      = each.value
+  depends_on = [
+    module.launch_template
+  ]
+}
+
+# # # # # you need to specify the subnet_id in terraform.tfvars before running this module
+# # # # module "ec2" {
+# # # #   for_each = { for ec2 in var.ec2 : ec2.name => ec2 }
+# # # #   source   = "../modules/compute"
+# # # #   ec2      = each.value
+# # # #   tags     = var.tags
+# # # #   depends_on = [
+# # # #     module.vpc,
+# # # #     module.subnet,
+# # # #     module.internet_gateway,
+# # # #     module.default_route_table,
+# # # #     module.default_security_group ]
+# # # # }
+
 # # # this module needs the route table id !!!
 # # It's important to note that a VPC can have multiple route tables,
 # # but only one main route table. While additional route tables
@@ -106,27 +180,4 @@ module "iam_role" {
 # #     module.route_table
 # #   ]
 # # }
-
-module "launch_template" {
-  for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
-  source          = "../modules/compute"
-  launch_template = each.value
-  # depends_on = [
-  #   module.security_group
-  # ]
-}
-
-# # # # # you need to specify the subnet_id in terraform.tfvars before running this module
-# # # # module "ec2" {
-# # # #   for_each = { for ec2 in var.ec2 : ec2.name => ec2 }
-# # # #   source   = "../modules/compute"
-# # # #   ec2      = each.value
-# # # #   tags     = var.tags
-# # # #   depends_on = [
-# # # #     module.vpc,
-# # # #     module.subnet,
-# # # #     module.internet_gateway,
-# # # #     module.default_route_table,
-# # # #     module.default_security_group ]
-# # # # }
 

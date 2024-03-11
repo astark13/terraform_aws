@@ -29,11 +29,12 @@ variable "vpc" {
 variable "subnet" {
   type = list(
     object({
-      vpc_id            = string
-      availability_zone = string
-      newbits           = number
-      netnum            = number
-      tags              = map(string)
+      vpc_id                  = string
+      availability_zone       = string
+      newbits                 = number
+      netnum                  = number
+      map_public_ip_on_launch = bool
+      tags                    = map(string)
     })
   )
 }
@@ -121,7 +122,35 @@ variable "iam_role" {
     object({
       name = string
       tags = map(string)
-      policy_arn = set(string)
+      #policy_arn = set(string)
+    })
+  )
+}
+
+# # iam_role_policy_attachment
+# variable "iam_rpa" {
+#   type = list(
+#     object({
+#       role = string
+#       policy_arn = set(string)
+#     })
+#   )
+# }
+
+# iam_role_policy_attachment
+variable "iam_rpa" {
+  type = object({
+    role       = string
+    policy_arn = set(string)
+  })
+}
+
+# iam_instance_profile
+variable "iam_i_p" {
+  type = list(
+    object({
+      name = string
+      role = string
     })
   )
 }
@@ -165,6 +194,36 @@ variable "launch_template" {
       )
     })
   )
+}
+
+variable "ec2lt" {
+  type = list(
+    object({
+      subnet_id          = string
+      launch_template_id = string
+      tags               = map(string)
+    })
+  )
+}
+
+variable "asg" {
+  type = list(
+    object({
+      name                = string
+      vpc_zone_identifier = list(string)
+      desired_capacity    = number
+      max_size            = number
+      min_size            = number
+      launch_template_id  = string
+      tag = list(
+        object({
+          key                 = string
+          value               = string
+          propagate_at_launch = bool
+        })
+      )  
+    })
+  )    
 }
 
 variable "ec2" {
