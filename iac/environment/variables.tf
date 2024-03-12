@@ -12,15 +12,27 @@ variable "aws_secret_key" {
   sensitive = true
 }
 
-
 # variable "tags" {
 #   type = map(string)
+# }
+
+# UNCOMMENT in case you want to
+# use global variables
+# variable "project" {
+#   type = string
+# }
+
+# UNCOMMENT in case you want to
+# use global variables
+# variable "environment" {
+#   type = string
 # }
 
 variable "vpc" {
   type = list(
     object({
       cidr_block = string
+      # COMMENT in case global variables are used
       tags       = map(string)
     })
   )

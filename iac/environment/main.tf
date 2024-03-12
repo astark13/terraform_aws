@@ -1,9 +1,13 @@
-# # needs to be run alone, before subnet creation
-# module "vpc" {
-#   for_each = { for vpc in var.vpc : vpc.cidr_block => vpc }
-#   source   = "../modules/network/"
-#   vpc      = each.value
-# }
+# needs to be run alone, before subnet creation
+module "vpc" {
+  for_each = { for vpc in var.vpc : vpc.cidr_block => vpc }
+  source   = "../modules/network/"
+  vpc      = each.value
+  # uncomment in case you want to
+  # use global variables
+  # project  = var.project
+  # environment = var.environment
+}
 
 # # this module needs the vpc_id of the previously created vpc !!!
 # module "subnet" {
@@ -84,18 +88,18 @@
 #   ]
 # }
 
-module "iam_role" {
-  for_each = { for iam_role in var.iam_role : iam_role.name => iam_role }
-  source   = "../modules/iam"
-  iam_role = each.value
-}
+# module "iam_role" {
+#   for_each = { for iam_role in var.iam_role : iam_role.name => iam_role }
+#   source   = "../modules/iam"
+#   iam_role = each.value
+# }
 
-resource "aws_iam_role_policy_attachment" "test-attach" {
-  for_each   = var.iam_rpa.policy_arn
-  role       = var.iam_rpa.role
-  policy_arn = each.value
-  depends_on = [module.iam_role]
-}
+# resource "aws_iam_role_policy_attachment" "test-attach" {
+#   for_each   = var.iam_rpa.policy_arn
+#   role       = var.iam_rpa.role
+#   policy_arn = each.value
+#   depends_on = [module.iam_role]
+# }
 
 # module "iam_role_policy_attachment" {
 #   for_each = { for iam_z in var.iam_z : iam_z.role => iam_z }
@@ -103,52 +107,52 @@ resource "aws_iam_role_policy_attachment" "test-attach" {
 #   iam_z  = each.value
 # }
 
-# iam_instance_profile
-module "iam_i_p" {
-  for_each = { for iam_i_p in var.iam_i_p : iam_i_p.name => iam_i_p }
-  source   = "../modules/iam"
-  iam_i_p  = each.value
-  depends_on = [
-    module.iam_role
-  ]
-}
+# # iam_instance_profile
+# module "iam_i_p" {
+#   for_each = { for iam_i_p in var.iam_i_p : iam_i_p.name => iam_i_p }
+#   source   = "../modules/iam"
+#   iam_i_p  = each.value
+#   depends_on = [
+#     module.iam_role
+#   ]
+# }
 
-# if you want to assign a role to an EC2 instance,
-# you need to create a "iam_instance_profile" first!!!
-module "launch_template" {
-  for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
-  source          = "../modules/compute"
-  launch_template = each.value
-  # depends_on = [
-  #   module.security_group
-  # ]
-}
+# # if you want to assign a role to an EC2 instance,
+# # you need to create a "iam_instance_profile" first!!!
+# module "launch_template" {
+#   for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
+#   source          = "../modules/compute"
+#   launch_template = each.value
+#   # depends_on = [
+#   #   module.security_group
+#   # ]
+# }
 
-# you need to specify the subnet_id and launch_template_id in terraform.tfvars
-# before running this module which creates an EC2 instance using a launch template
-module "ec2lt" {
-  for_each = { for ec2lt in var.ec2lt : ec2lt.tags.Name => ec2lt }
-  source   = "../modules/compute"
-  ec2lt    = each.value
-  # tags     = var.tags
-  depends_on = [
-    module.launch_template
-    #   module.vpc,
-    #   module.subnet,
-    #   module.internet_gateway,
-    #   module.default_route_table,
-    #   module.default_security_group 
-  ]
-}
+# # you need to specify the subnet_id and launch_template_id in terraform.tfvars
+# # before running this module which creates an EC2 instance using a launch template
+# module "ec2lt" {
+#   for_each = { for ec2lt in var.ec2lt : ec2lt.tags.Name => ec2lt }
+#   source   = "../modules/compute"
+#   ec2lt    = each.value
+#   # tags     = var.tags
+#   depends_on = [
+#     module.launch_template
+#     #   module.vpc,
+#     #   module.subnet,
+#     #   module.internet_gateway,
+#     #   module.default_route_table,
+#     #   module.default_security_group 
+#   ]
+# }
 
-module "autoscaling_group" {
-  for_each = { for asg in var.asg : asg.name => asg }
-  source   = "../modules/compute"
-  asg      = each.value
-  depends_on = [
-    module.launch_template
-  ]
-}
+# module "autoscaling_group" {
+#   for_each = { for asg in var.asg : asg.name => asg }
+#   source   = "../modules/compute"
+#   asg      = each.value
+#   depends_on = [
+#     module.launch_template
+#   ]
+# }
 
 # # # # # you need to specify the subnet_id in terraform.tfvars before running this module
 # # # # module "ec2" {

@@ -1,6 +1,21 @@
+# UNCOMMENT in case you want to
+# use global variables
+# variable "project" {
+#   type = string
+#   default = null
+# }
+
+# UNCOMMENT in case you want to
+# use global variables
+# variable "environment" {
+#   type = string
+#   default = null
+# }
+
 variable "vpc" {
   type = object({
     cidr_block = string
+    # COMMENT in case global variables are used
     tags       = map(string)
   })
   default = null

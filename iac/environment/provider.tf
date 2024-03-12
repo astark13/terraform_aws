@@ -14,8 +14,10 @@ provider "aws" {
   secret_key = var.aws_secret_key
   default_tags {
     tags = {
-      Environment = "test"
-      Name        = "terraform"
+      Origin      = "Terraform"
+      Environment = "Dev"
+      Project     = "ProjectA"
+      Owner       = "Adi"
     }
   }
 }
