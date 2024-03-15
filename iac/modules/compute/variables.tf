@@ -58,6 +58,20 @@ variable "asg" {
   default = null
 }
 
+# # autoscaling_policy
+# variable "asgplc" {
+#   type = object({
+#     name                   = string
+#     policy_type            = string
+#     scaling_adjustment     = number
+#     adjustment_type        = string
+#     cooldown               = number
+#     autoscaling_group_name = string
+#     predefined_metric_type = string
+#     target_value           = number
+#   })
+#   default = null
+# }
 
 # variable "tags" {
 #   default = null

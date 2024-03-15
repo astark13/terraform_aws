@@ -1,6 +1,3 @@
-# consider using this module together with the
-# main_route_table_association module
-
 resource "aws_route_table" "rt" {
   count  = var.rt == null ? 0 : 1
   vpc_id = var.rt.vpc_id

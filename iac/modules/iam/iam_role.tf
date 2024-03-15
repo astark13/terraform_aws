@@ -1,4 +1,4 @@
-resource "aws_iam_role" "tf_role" {
+resource "aws_iam_role" "test_role" {
   count = var.iam_role == null ? 0 : 1
   name  = var.iam_role.name
 
@@ -17,7 +17,6 @@ resource "aws_iam_role" "tf_role" {
       },
     ]
   })
-
   tags = var.iam_role.tags
 }
 

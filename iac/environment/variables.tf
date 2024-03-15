@@ -12,10 +12,6 @@ variable "aws_secret_key" {
   sensitive = true
 }
 
-# variable "tags" {
-#   type = map(string)
-# }
-
 # UNCOMMENT in case you want to
 # use global variables
 # variable "project" {
@@ -33,7 +29,7 @@ variable "vpc" {
     object({
       cidr_block = string
       # COMMENT in case global variables are used
-      tags       = map(string)
+      tags = map(string)
     })
   )
 }
@@ -139,22 +135,12 @@ variable "iam_role" {
   )
 }
 
-# # iam_role_policy_attachment
-# variable "iam_rpa" {
-#   type = list(
-#     object({
-#       role = string
-#       policy_arn = set(string)
-#     })
-#   )
-# }
-
-# iam_role_policy_attachment
+#iam_role_policy_assignment
 variable "iam_rpa" {
   type = object({
-    role       = string
-    policy_arn = set(string)
-  })
+      role       = string
+      policy_arn = set(string)
+    })
 }
 
 # iam_instance_profile
@@ -166,26 +152,6 @@ variable "iam_i_p" {
     })
   )
 }
-
-
-# main_route_table
-variable "mrt" {
-  type = list(
-    object({
-      vpc_id         = string
-      route_table_id = string
-    })
-  )
-}
-
-# variable "drt" {
-#   type = list(
-#     object({
-#       name   = string
-#       vpc_id = string
-#     })
-#   )
-# }
 
 variable "launch_template" {
   type = list(
@@ -208,16 +174,7 @@ variable "launch_template" {
   )
 }
 
-variable "ec2lt" {
-  type = list(
-    object({
-      subnet_id          = string
-      launch_template_id = string
-      tags               = map(string)
-    })
-  )
-}
-
+# autoscaling_group
 variable "asg" {
   type = list(
     object({
@@ -233,9 +190,48 @@ variable "asg" {
           value               = string
           propagate_at_launch = bool
         })
-      )  
+      )
     })
-  )    
+  )
+}
+
+# autoscaling group policy
+# variable "asgplc" {
+#   type = list(
+#     object({
+#     name                   = string
+#     policy_type            = string
+#     scaling_adjustment     = number
+#     adjustment_type        = string
+#     cooldown               = number
+#     autoscaling_group_name = string
+#     predefined_metric_type = string
+#     target_value           = number
+#     })
+#   )  
+# }
+
+# autoscaling group policy
+variable "asgplc" {
+  type = object({
+    name                   = string
+    policy_type            = string
+    adjustment_type        = string
+    autoscaling_group_name = string
+    predefined_metric_type = string
+    target_value           = number
+  })
+}
+
+# ec2_with_launch_template
+variable "ec2lt" {
+  type = list(
+    object({
+      subnet_id          = string
+      launch_template_id = string
+      tags               = map(string)
+    })
+  )
 }
 
 variable "ec2" {
@@ -248,3 +244,38 @@ variable "ec2" {
     })
   )
 }
+
+# main_route_table
+variable "mrt" {
+  type = list(
+    object({
+      vpc_id         = string
+      route_table_id = string
+    })
+  )
+}
+
+# variable "drt" {
+#   type = list(
+#     object({
+#       name   = string
+#       vpc_id = string
+#     })
+#   )
+# }
+
+
+
+
+
+
+
+# #list iam_role_policy_assignment
+# variable "iam_rpa" {
+#   type = list(
+#     object({
+#       role       = string
+#       policy_arn = list(string)
+#     })
+#   )  
+# }
