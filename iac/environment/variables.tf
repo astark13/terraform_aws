@@ -135,6 +135,16 @@ variable "iam_role" {
   )
 }
 
+# #iam_role_policy_assignment
+# variable "iam_rpa" {
+#   type = list( 
+#     object({
+#       role       = string
+#       policy_arn = set(string)
+#     })
+#   )  
+# }
+
 #iam_role_policy_assignment
 variable "iam_rpa" {
   type = object({
@@ -195,7 +205,7 @@ variable "asg" {
   )
 }
 
-# autoscaling group policy
+# # autoscaling group policy
 # variable "asgplc" {
 #   type = list(
 #     object({
@@ -222,6 +232,25 @@ variable "asgplc" {
     target_value           = number
   })
 }
+
+# # loadbalancer
+# variable "lb" {
+#   type = list(
+#     object ({
+#       name               = string
+#       internal           = bool
+#       load_balancer_type = string
+#       security_groups    = list(string)
+#       subnets            = list(string)
+#       access_logs = object({
+#         s3_bucket              = string
+#         s3_prefix              = string
+#         s3_access_logs_enabled = string
+#       })
+#       tags               = map(string)
+#     })
+#   ) 
+# }
 
 # ec2_with_launch_template
 variable "ec2lt" {

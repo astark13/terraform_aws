@@ -34,6 +34,6 @@
 #       # ASGTotalNetworkOut, ALBTargetGroupRequestCount
 #       predefined_metric_type = var.asgplc.predefined_metric_type  
 #     }
-#     target_value = var.asgplc.target_value                        
+#   target_value = var.asgplc.target_value                        
 #   }
 # }

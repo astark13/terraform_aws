@@ -58,17 +58,35 @@ variable "asg" {
   default = null
 }
 
-# # autoscaling_policy
-# variable "asgplc" {
+# autoscaling_policy
+variable "asgplc" {
+  type = object({
+    name                   = string
+    policy_type            = string
+    scaling_adjustment     = number
+    adjustment_type        = string
+    cooldown               = number
+    autoscaling_group_name = string
+    predefined_metric_type = string
+    target_value           = number
+  })
+  default = null
+}
+
+# # loadbalancer
+# variable "lb" {
 #   type = object({
-#     name                   = string
-#     policy_type            = string
-#     scaling_adjustment     = number
-#     adjustment_type        = string
-#     cooldown               = number
-#     autoscaling_group_name = string
-#     predefined_metric_type = string
-#     target_value           = number
+#     name               = string
+#     internal           = bool
+#     load_balancer_type = string
+#     security_groups    = list(string)
+#     subnets            = list(string)
+#     access_logs = object({
+#       s3_bucket              = string
+#       s3_prefix              = string
+#       s3_access_logs_enabled = string
+#     })
+#     tags               = map(string)
 #   })
 #   default = null
 # }

@@ -7,6 +7,15 @@ variable "iam_role" {
   default = null
 }
 
+#iam_role_policy_assignment
+variable "iam_rpa" {
+  type = object({
+    role       = string
+    policy_arn = list(string)
+  })
+  default = null
+}
+
 # iam_instance_profile
 variable "iam_i_p" {
   type = object({
@@ -16,10 +25,3 @@ variable "iam_i_p" {
   default = null
 }
 
-# variable "iam_rpa" {
-#   type = object({
-#     role       = string
-#     policy_arn = list(string)
-#   })
-#   default = null
-# }
