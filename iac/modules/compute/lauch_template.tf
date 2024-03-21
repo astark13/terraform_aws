@@ -1,4 +1,4 @@
-resource "aws_launch_template" "terraform_lauch_template" {
+resource "aws_launch_template" "launch_template" {
   count                  = var.launch_template == null ? 0 : 1
   name                   = var.launch_template.name
   image_id               = var.launch_template.image_id

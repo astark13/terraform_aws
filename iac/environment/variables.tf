@@ -135,7 +135,7 @@ variable "iam_role" {
   )
 }
 
-# #iam_role_policy_assignment
+# #iam_role_policy_attachment
 # variable "iam_rpa" {
 #   type = list( 
 #     object({
@@ -148,9 +148,9 @@ variable "iam_role" {
 #iam_role_policy_assignment
 variable "iam_rpa" {
   type = object({
-      role       = string
-      policy_arn = set(string)
-    })
+    role       = string
+    policy_arn = set(string)
+  })
 }
 
 # iam_instance_profile
@@ -184,6 +184,20 @@ variable "launch_template" {
   )
 }
 
+# loadbalancer target group
+variable "lb_tg" {
+  type = list(
+    object({
+      name        = string
+      #target_type = string
+      port        = number
+      protocol    = string
+      vpc_id      = string
+      tags        = map(string)
+    })
+  )
+}
+
 # autoscaling_group
 variable "asg" {
   type = list(
@@ -193,6 +207,7 @@ variable "asg" {
       desired_capacity    = number
       max_size            = number
       min_size            = number
+      target_group_arns   = set(string)
       launch_template_id  = string
       tag = list(
         object({
@@ -233,24 +248,49 @@ variable "asgplc" {
   })
 }
 
-# # loadbalancer
-# variable "lb" {
-#   type = list(
-#     object ({
-#       name               = string
-#       internal           = bool
-#       load_balancer_type = string
-#       security_groups    = list(string)
-#       subnets            = list(string)
-#       access_logs = object({
-#         s3_bucket              = string
-#         s3_prefix              = string
-#         s3_access_logs_enabled = string
-#       })
-#       tags               = map(string)
-#     })
-#   ) 
-# }
+# loadbalancer
+variable "lb" {
+  type = list(
+    object({
+      name               = string
+      internal           = bool
+      load_balancer_type = string
+      security_groups    = list(string)
+      subnets            = list(string)
+      # access_logs = object({
+      #   s3_bucket              = string
+      #   s3_prefix              = string
+      #   s3_access_logs_enabled = bool
+      # })
+      tags = map(string)
+    })
+  )
+}
+
+# loadbalancer listener
+variable "lb_listener" {
+  type = list(
+    object({
+      load_balancer_arn = string
+      port              = number
+      protocol          = string
+      action_type       = string
+      target_group_arn  = string
+      tags              = map(string)
+    })
+  )
+}
+
+# loadbalancer target group attachment
+variable "lb_tga" {
+  type = list(
+    object({
+      target_group_arn = string
+      target_id        = string
+      port             = number
+    })
+  )
+}
 
 # ec2_with_launch_template
 variable "ec2lt" {

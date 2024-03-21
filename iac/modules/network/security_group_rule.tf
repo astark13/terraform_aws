@@ -1,4 +1,4 @@
-resource "aws_security_group_rule" "example" {
+resource "aws_security_group_rule" "sgr" {
   count             = var.sgr == null ? 0 : 1
   description       = var.sgr.description
   type              = var.sgr.type
