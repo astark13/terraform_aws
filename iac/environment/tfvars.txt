@@ -1,0 +1,324 @@
+aws_region = "eu-central-1"
+
+aws_access_key = "xxx"
+
+aws_secret_key = "xxx"
+
+vpc = [
+  {
+    cidr_block = "10.0.0.0/26"
+    tags = {
+      "Name" = "project-a-dev-vpc"
+    }
+  }
+]
+
+subnet = [
+  {
+    vpc_id                  = "vpc-0bcd25237548c25d7"
+    availability_zone       = "eu-central-1a"
+    newbits                 = 2
+    netnum                  = 0
+    map_public_ip_on_launch = true
+    tags = {
+      "Name" = "project-a-dev-public-1a-1"
+    }
+  },
+  {
+    vpc_id                  = "vpc-0bcd25237548c25d7"
+    availability_zone       = "eu-central-1b"
+    newbits                 = 2
+    netnum                  = 1
+    map_public_ip_on_launch = true
+    tags = {
+      "Name" = "project-a-dev-public-1b-1"
+    }
+  },
+  {
+    vpc_id                  = "vpc-0bcd25237548c25d7"
+    availability_zone       = "eu-central-1a"
+    newbits                 = 2
+    netnum                  = 2
+    map_public_ip_on_launch = false
+    tags = {
+      "Name" = "project-a-dev-private-1a-1"
+    }
+  },
+  {
+    vpc_id                  = "vpc-0bcd25237548c25d7"
+    availability_zone       = "eu-central-1b"
+    newbits                 = 2
+    netnum                  = 3
+    map_public_ip_on_launch = false
+    tags = {
+      "Name" = "project-a-dev-private-1b-1"
+    }
+  }
+]
+
+ig = [
+  {
+    vpc_id = "vpc-0bcd25237548c25d7"
+    tags = {
+      "Name" = "project-a-dev-igw"
+    }
+  }
+]
+
+eip = [
+  {
+    domain = "vpc"
+    tags = {
+      "Name" = "project-a-dev-eip-ngw"
+    }
+  }
+]
+
+ngw = [
+  {
+    allocation_id = "eipalloc-04fc5898f33c84fc0"
+    subnet_id     = "subnet-094706d5e8dc4927b"
+    tags = {
+      "Name" = "project-a-dev-ngw"
+    }
+  }
+]
+
+rt = [
+  {
+    vpc_id = "vpc-0bcd25237548c25d7"
+    route = [
+      {
+        cidr_block = "10.0.0.0/26"
+        gateway_id = "local"
+      },
+      {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = "nat-09b27e37c4ed87cf0"
+      }
+    ]
+    tags = {
+      "Name" = "project-a-dev-private-rt"
+    }
+  },
+  {
+    vpc_id = "vpc-0bcd25237548c25d7"
+    route = [
+      {
+        cidr_block = "10.0.0.0/26"
+        gateway_id = "local"
+      },
+      {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = "igw-02f3f2b5ef35c977f"
+      }
+    ]
+    tags = {
+      "Name" = "project-a-dev-public-rt"
+    }
+  }
+]
+
+rta = [
+  {
+    subnet_id      = "subnet-083dd338d5009d1b1"
+    route_table_id = "rtb-06c408873b92f6e7b"
+  },
+  {
+    subnet_id      = "subnet-0e624b33e24959d5d"
+    route_table_id = "rtb-06c408873b92f6e7b"
+  },
+  {
+    subnet_id      = "subnet-094706d5e8dc4927b"
+    route_table_id = "rtb-04e1b2a25e3cb7904"
+  },
+  {
+    subnet_id      = "subnet-071770daad2bbb235"
+    route_table_id = "rtb-04e1b2a25e3cb7904"
+  }
+]
+
+sg = [
+  {
+    name        = "project-a-dev-instance-sg"
+    description = "SG for private subnets"
+    vpc_id      = "vpc-0bcd25237548c25d7"
+  },
+  {
+    name        = "project-a-dev-elb-sg"
+    description = "SG for public subnets"
+    vpc_id      = "vpc-0bcd25237548c25d7"
+  }
+]
+
+sgr = [
+  {
+    description       = "Allow all inbound traffic - private subnet"
+    type              = "ingress"
+    from_port         = 0
+    to_port           = 0
+    protocol          = "-1"
+    cidr_block        = ["10.0.0.0/26"]
+    security_group_id = "sg-0d8d76cf3b292337e"
+  },
+  {
+    description       = "Allow all outbound traffic - private subnet"
+    type              = "egress"
+    from_port         = 0
+    to_port           = 0
+    protocol          = "-1"
+    cidr_block        = ["10.0.0.0/26"]
+    security_group_id = "sg-0d8d76cf3b292337e"
+  },
+  {
+    description       = "Allow all inbound traffic - public subnet"
+    type              = "ingress"
+    from_port         = 0
+    to_port           = 0
+    protocol          = "-1"
+    cidr_block        = ["10.0.0.0/26"]
+    security_group_id = "sg-02ed52317f3e8656f"
+  },
+  {
+    description       = "Allow all outbound traffic - public subnet"
+    type              = "egress"
+    from_port         = 0
+    to_port           = 0
+    protocol          = "-1"
+    cidr_block        = ["10.0.0.0/26"]
+    security_group_id = "sg-02ed52317f3e8656f"
+  }
+]
+
+iam_role = [
+  {
+    name = "EC2AccessToSSM"
+    tags = {
+      "Name" = "EC2AccessToSSM"
+    }
+  }
+]
+
+# iam_rpa = [
+#   {
+#     role = "EC2AccessToSSM"
+#     policy_arn = [
+#       "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+#       "arn:aws:iam::aws:policy/AmazonSSMPatchAssociation"]
+#   }
+# ]
+
+# iam_role_policy_attachment
+iam_rpa = {
+  role = "EC2AccessToSSM"
+  policy_arn = [
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+  "arn:aws:iam::aws:policy/AmazonSSMPatchAssociation"]
+}
+
+# iam_instance_profile
+iam_i_p = [
+  {
+    name = "EC2AccessToSSM-Profile"
+    role = "EC2AccessToSSM"
+  }
+]
+
+launch_template = [
+  {
+    name                   = "AML2023_t2.micro_SMM_Apache"
+    image_id               = "ami-08188dffd130a1ac2"
+    instance_type          = "t2.micro"
+    vpc_security_group_ids = ["sg-0d8d76cf3b292337e"]
+    iam_instance_profile   = "EC2AccessToSSM-Profile"
+    user_data              = "install_apache_and_stress.sh"
+    tag_specifications = [
+      {
+        resource_type = "instance"
+        tags = {
+          "Name" = "AML2023_t2.micro_SMM_Apache"
+        }
+      }
+    ]
+  }
+]
+
+# loadbalancer_target_group
+lb_tg = [
+  {
+    name     = "project-a-dev-alb-tg"
+    port     = 80
+    protocol = "HTTP"
+    vpc_id   = "vpc-0bcd25237548c25d7"
+    tags = {
+      "Name" = "Target group for ALB"
+    }
+  }
+]
+
+# autoscaling_group
+asg = [
+  {
+    desired_capacity   = 2
+    launch_template_id = "lt-04f95c0d2df8d0b5d"
+    max_size           = 4
+    min_size           = 2
+    name               = "Apache_ASG"
+    tag = [{
+      key                 = "Name"
+      propagate_at_launch = true
+      value               = "project-a-dev-apache"
+    }]
+    target_group_arns = ["arn:aws:elasticloadbalancing:eu-central-1:637423575860:targetgroup/project-a-dev-alb-tg/f17dae90804b0aec"]
+    vpc_zone_identifier = [
+      "subnet-083dd338d5009d1b1",
+      "subnet-0e624b33e24959d5d"
+    ]
+  }
+]
+
+# autoscaling_policy
+asgplc = {
+  name                   = "TargetTrackingScaling-policy"
+  policy_type            = "TargetTrackingScaling"
+  adjustment_type        = "ChangeInCapacity"
+  autoscaling_group_name = "Apache_ASG"
+  predefined_metric_type = "ASGAverageCPUUtilization"
+  target_value           = 50
+}
+
+# loadbalancer
+lb = [
+  {
+    name               = "project-a-dev-elb"
+    internal           = false
+    load_balancer_type = "application"
+    security_groups    = ["sg-02ed52317f3e8656f"]
+    subnets            = [
+      "subnet-094706d5e8dc4927b",
+      "subnet-071770daad2bbb235"
+    ]
+    # access_logs = object({
+    #   s3_bucket              = string
+    #   s3_prefix              = string
+    #   s3_access_logs_enabled = bool
+    # })
+    tags = {
+      "Name" = "project-a-dev-elb"
+    }
+  }
+]
+
+# loadbalancer listener
+lb_listener = [
+  {
+    load_balancer_arn = "arn:aws:elasticloadbalancing:eu-central-1:637423575860:loadbalancer/app/project-a-dev-elb/015e517171ef7bf2"
+    port              = 80
+    protocol          = "HTTP"
+    action_type       = "forward"
+    target_group_arn  = "arn:aws:elasticloadbalancing:eu-central-1:637423575860:targetgroup/project-a-dev-alb-tg/f17dae90804b0aec"
+    tags = {
+      "Name" = "project-a-dev-elb-listener"
+    }
+  }
+]
