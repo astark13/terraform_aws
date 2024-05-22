@@ -1,0 +1,13 @@
+aws_region = "eu-central-1"
+
+aws_access_key = "xxx"
+
+aws_secret_key = "xxx"
+
+bucket_name = "project-a-terraform.tfstate-bucket"
+
+bucket_tags = {
+  "Name" = "Bucket for terraform.tfstate"
+}
+
+dynamodb_table_name = "terraform-state-locking"
