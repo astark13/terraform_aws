@@ -5,6 +5,5 @@ terraform {
     region                   = "eu-central-1"
     dynamodb_table           = "terraform-state-locking"
     encrypt                  = true
-    shared_credentials_files = ["/home/stark/.aws/credentials"]
   }
 }
