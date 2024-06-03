@@ -24,10 +24,27 @@ variable "vpc" {
   )
 }
 
+# variable "subnet" {
+#   type = list(
+#     object({
+#       # if using data source for vpc_id, 
+#       # provide vpc tag "Name", else provide vpc_id directly
+#       vpc_id                  = string
+#       availability_zone       = string
+#       newbits                 = number
+#       netnum                  = number
+#       map_public_ip_on_launch = bool
+#       tags                    = map(string)
+#     })
+#   )
+# }
+
 variable "subnet" {
   type = list(
     object({
-      vpc_id                  = string
+      # if using data source for vpc_id, 
+      # provide vpc tag "Name", else provide vpc_id directly
+      vpc                     = string
       availability_zone       = string
       newbits                 = number
       netnum                  = number
@@ -37,11 +54,25 @@ variable "subnet" {
   )
 }
 
+# # internet_gateway
+# variable "ig" {
+#   type = list(
+#     object({
+#       # if using data source for vpc_id, 
+#       # provide vpc tag "Name", else provide vpc_id directly
+#       vpc_id = string
+#       tags   = map(string)
+#     })
+#   )
+# }
+
 # internet_gateway
 variable "ig" {
   type = list(
     object({
-      vpc_id = string
+      # if using data source for vpc_id, 
+      # provide vpc tag "Name", else provide vpc_id directly
+      vpc    = string
       tags   = map(string)
     })
   )
@@ -57,13 +88,24 @@ variable "eip" {
   )
 }
 
+# # nat_gateway
+# variable "ngw" {
+#   type = list(
+#     object({
+#       allocation_id = string
+#       subnet_id     = string
+#       tags          = map(string)
+#     })
+#   )
+# }
+
 # nat_gateway
 variable "ngw" {
   type = list(
     object({
-      allocation_id = string
-      subnet_id     = string
-      tags          = map(string)
+      eip    = string
+      subnet = string
+      tags   = map(string)
     })
   )
 }

@@ -1,12 +1,5 @@
 # UNCOMMENT in case you want to
 # use global variables
-# variable "project" {
-#   type = string
-#   default = null
-# }
-
-# UNCOMMENT in case you want to
-# use global variables
 # variable "environment" {
 #   type = string
 #   default = null
@@ -21,22 +14,49 @@ variable "vpc" {
   default = null
 }
 
+# variable "subnet" {
+#   type = object({
+#     # if using data source for vpc_id, 
+#     # provide vpc tag "Name", else provide vpc_id directly
+#     vpc_id                  = string
+#     availability_zone       = string
+#     newbits                 = number
+#     netnum                  = number
+#     map_public_ip_on_launch = bool
+#     tags                    = map(string)
+#     #vpc_name_tag            = string
+#   })
+#   default = null
+# }
+
 variable "subnet" {
   type = object({
-    vpc_id                  = string
+    # if using data source for vpc_id, 
+    # provide vpc tag "Name", else provide vpc_id directly
+    vpc                     = string
     availability_zone       = string
     newbits                 = number
     netnum                  = number
     map_public_ip_on_launch = bool
     tags                    = map(string)
+    #vpc_name_tag            = string
   })
   default = null
 }
 
+# #internet_gateway
+# variable "ig" {
+#   type = object({
+#     vpc_id = string
+#     tags   = map(string)
+#   })
+#   default = null
+# }
+
 #internet_gateway
 variable "ig" {
   type = object({
-    vpc_id = string
+    vpc = string
     tags   = map(string)
   })
   default = null
@@ -52,15 +72,26 @@ variable "eip" {
 }
 
 
+# #nat_gateway
+# variable "ngw" {
+#   type = object({
+#     allocation_id = string
+#     subnet_id     = string
+#     tags          = map(string)
+#   })
+#   default = null
+# }
+
 #nat_gateway
 variable "ngw" {
   type = object({
-    allocation_id = string
-    subnet_id     = string
-    tags          = map(string)
+    eip    = string
+    subnet = string
+    tags   = map(string)
   })
   default = null
 }
+
 
 #route_table
 variable "rt" {

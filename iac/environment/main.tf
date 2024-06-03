@@ -9,44 +9,44 @@ module "vpc" {
   # environment = var.environment
 }
 
-# # this module needs the vpc_id of the previously created vpc !!!
-# module "subnet" {
-#   for_each = { for subnet in var.subnet : subnet.tags.Name => subnet }
-#   source   = "../modules/network/"
-#   subnet   = each.value
-#   depends_on = [
-#     module.vpc
-#   ]
-# }
+# this module needs the vpc_id of the previously created vpc !!!
+module "subnet" {
+  for_each = { for subnet in var.subnet : subnet.tags.Name => subnet }
+  source   = "../modules/network/"
+  subnet   = each.value
+  depends_on = [
+    module.vpc
+  ]
+}
 
-# module "internet_gateway" {
-#   for_each = { for ig in var.ig : ig.tags.Name => ig }
-#   source   = "../modules/network/"
-#   ig       = each.value
-#   depends_on = [
-#     module.vpc
-#   ]
-# }
+module "internet_gateway" {
+  for_each = { for ig in var.ig : ig.tags.Name => ig }
+  source   = "../modules/network/"
+  ig       = each.value
+  depends_on = [
+    module.vpc
+  ]
+}
 
-# # elastic ip
-# module "eip" {
-#   for_each = { for eip in var.eip : eip.tags.Name => eip }
-#   source   = "../modules/network/"
-#   eip      = each.value
-#   depends_on = [
-#     module.vpc
-#   ]
-# }
+# elastic ip
+module "eip" {
+  for_each = { for eip in var.eip : eip.tags.Name => eip }
+  source   = "../modules/network/"
+  eip      = each.value
+  depends_on = [
+    module.vpc
+  ]
+}
 
-# module "nat_gateway" {
-#   for_each = { for ngw in var.ngw : ngw.tags.Name => ngw }
-#   source   = "../modules/network/"
-#   ngw      = each.value
-#   depends_on = [
-#     module.subnet,
-#     module.eip
-#   ]
-# }
+module "nat_gateway" {
+  for_each = { for ngw in var.ngw : ngw.tags.Name => ngw }
+  source   = "../modules/network/"
+  ngw      = each.value
+  depends_on = [
+    module.subnet,
+    module.eip
+  ]
+}
 
 # # this module needs the internet/nat gateway id !!!
 # module "route_table" {
