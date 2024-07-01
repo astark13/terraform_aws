@@ -114,12 +114,66 @@ variable "ngw" {
 variable "rt" {
   type = list(
     object({
-      vpc_id = string
-      route  = list(map(string))
+      # if using data source for vpc_id, 
+      # provide vpc tag "Name", else provide vpc_id directly
+      vpc    = string
       tags   = map(string)
     })
   )
 }
+
+# route_table_local_route
+variable "rt_l_r" {
+  type = list(
+    object({
+      # if using data source for route_table_id, 
+      # provide route_table tag "Name", else provide route_table_id
+      rt                     = string
+      destination_cidr_block = string
+    })
+  )
+}
+
+# route_table_ngw_route
+variable "rt_ngw_r" {
+  type = list(
+    object({
+      # if using data source for route_table_id, 
+      # provide route_table tag "Name", else provide route_table_id
+      rt                     = string
+      destination_cidr_block = string
+      #destination_type       = string
+      destination_name       = string
+    })
+  )
+}
+
+# route_table_igw_route
+variable "rt_igw_r" {
+  type = list(
+    object({
+      # if using data source for route_table_id, 
+      # provide route_table tag "Name", else provide route_table_id
+      rt                     = string
+      destination_cidr_block = string
+      #destination_type       = string
+      destination_name       = string
+    })
+  )
+}
+
+# # route_table_dynamic
+# variable "rtd" {
+#   type = list(
+#     object({
+#       # if using data source for vpc_id, 
+#       # provide vpc tag "Name", else provide vpc_id directly
+#       vpc    = string
+#       route  = list(map(string))
+#       tags   = map(string)
+#     })
+#   )
+# }
 
 # route_table_association
 variable "rta" {

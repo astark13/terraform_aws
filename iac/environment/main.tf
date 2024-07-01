@@ -48,11 +48,51 @@ module "nat_gateway" {
   ]
 }
 
+module "route_table" {
+  for_each = { for rt in var.rt: rt.tags.Name => rt }
+  source   = "../modules/network/"
+  rt      = each.value
+  depends_on = [
+    module.vpc,
+    module.internet_gateway,
+    module.nat_gateway
+  ]
+}
+
+
+# module "route_table_local_route" {
+#   for_each    = { for rt_l_r in var.rt_l_r: rt_l_r.rt => rt_l_r }
+#   source      = "../modules/network/"
+#   rt_l_r      = each.value
+#   depends_on = [
+#     module.route_table
+#   ]
+# }
+
+module "route_table_ngw_route" {
+  for_each    = { for rt_ngw_r in var.rt_ngw_r: rt_ngw_r.rt => rt_ngw_r }
+  source      = "../modules/network/"
+  rt_ngw_r    = each.value
+  depends_on = [
+    module.route_table
+  ]
+}
+
+module "route_table_igw_route" {
+  for_each    = { for rt_igw_r in var.rt_igw_r: rt_igw_r.rt => rt_igw_r }
+  source      = "../modules/network/"
+  rt_igw_r    = each.value
+  depends_on = [
+    module.route_table
+  ]
+}
+
+
 # # this module needs the internet/nat gateway id !!!
-# module "route_table" {
-#   for_each = { for rt in var.rt : rt.tags.Name => rt }
+# module "route_table_dynamic" {
+#   for_each = { for rtd in var.rtd : rtd.tags.Name => rtd }
 #   source   = "../modules/network/"
-#   rt       = each.value
+#   rtd      = each.value
 #   depends_on = [
 #     module.vpc,
 #     module.internet_gateway

@@ -17,8 +17,10 @@
 #   tags                    = var.subnet.tags
 # }
 
+##################################
 # the code below is configured to create these resources as part
 # of the desired architecture in a SINGLE "terraform apply"
+##################################
 data "aws_vpc" "subnet" {
   count = var.subnet == null ? 0 : 1
   tags  = {

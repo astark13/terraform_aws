@@ -5,8 +5,11 @@
 #   tags          = var.ngw.tags
 # }
 
+##################################
 # the code below is configured to create these resources as part
 # of the desired architecture in a SINGLE "terraform apply"
+##################################
+
 data "aws_eip" "ngw" {
   count = var.ngw == null ? 0 : 1
   tags = {

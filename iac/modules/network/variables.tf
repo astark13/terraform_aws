@@ -93,12 +93,52 @@ variable "ngw" {
 }
 
 
-#route_table
-variable "rt" {
+#route_table_dynamic
+variable "rtd" {
   type = object({
     vpc_id = string
     route  = list(map(string))
     tags   = map(string)
+  })
+  default = null
+}
+
+#route_table
+variable "rt" {
+  type = object({
+    vpc    = string
+    tags   = map(string)
+  })
+  default = null
+}
+
+#route_table_local_route
+variable "rt_l_r" {
+  type = object({
+    rt                     = string
+    destination_cidr_block = string
+  })
+  default = null
+}
+
+#route_table_ngw_route
+variable "rt_ngw_r" {
+  type = object({
+    rt                     = string
+    destination_cidr_block = string
+    #destination_type       = string
+    destination_name       = string
+  })
+  default = null
+}
+
+#route_table_igw_route
+variable "rt_igw_r" {
+  type = object({
+    rt                     = string
+    destination_cidr_block = string
+    #destination_type       = string
+    destination_name       = string
   })
   default = null
 }
