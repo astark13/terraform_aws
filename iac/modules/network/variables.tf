@@ -146,8 +146,10 @@ variable "rt_igw_r" {
 #route_table_association
 variable "rta" {
   type = object({
-    subnet_id       = string
-    route_table_id  = string
+    subnet          = string
+    #subnet_id       = string
+    route_table     = string
+    #route_table_id  = string
   })
   default = null
 }
@@ -157,7 +159,9 @@ variable "sg" {
   type = object({
     name        = string
     description = string
-    vpc_id      = string
+    vpc         = string
+    #vpc_id      = string
+    tags   = map(string)
   })
   default = null
 }
@@ -171,7 +175,8 @@ variable "sgr" {
     to_port           = number
     protocol          = string
     cidr_block        = list(string)
-    security_group_id = string
+    security_group    = string
+    #security_group_id = string
   })
   default = null
 }

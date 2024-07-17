@@ -49,9 +49,9 @@ module "nat_gateway" {
 }
 
 module "route_table" {
-  for_each = { for rt in var.rt: rt.tags.Name => rt }
+  for_each = { for rt in var.rt : rt.tags.Name => rt }
   source   = "../modules/network/"
-  rt      = each.value
+  rt       = each.value
   depends_on = [
     module.vpc,
     module.internet_gateway,
@@ -70,18 +70,18 @@ module "route_table" {
 # }
 
 module "route_table_ngw_route" {
-  for_each    = { for rt_ngw_r in var.rt_ngw_r: rt_ngw_r.rt => rt_ngw_r }
-  source      = "../modules/network/"
-  rt_ngw_r    = each.value
+  for_each = { for rt_ngw_r in var.rt_ngw_r : rt_ngw_r.rt => rt_ngw_r }
+  source   = "../modules/network/"
+  rt_ngw_r = each.value
   depends_on = [
     module.route_table
   ]
 }
 
 module "route_table_igw_route" {
-  for_each    = { for rt_igw_r in var.rt_igw_r: rt_igw_r.rt => rt_igw_r }
-  source      = "../modules/network/"
-  rt_igw_r    = each.value
+  for_each = { for rt_igw_r in var.rt_igw_r : rt_igw_r.rt => rt_igw_r }
+  source   = "../modules/network/"
+  rt_igw_r = each.value
   depends_on = [
     module.route_table
   ]
@@ -99,39 +99,39 @@ module "route_table_igw_route" {
 #   ]
 # }
 
-# # this module needs the internet gateway id !!!
-# module "route_table_association" {
-#   for_each = { for rta in var.rta : rta.subnet_id => rta }
-#   source   = "../modules/network/"
-#   rta      = each.value
-#   depends_on = [
-#     module.subnet,
-#     module.internet_gateway,
-#     module.nat_gateway,
-#     module.route_table
-#   ]
-# }
+# this module needs the internet gateway id !!!
+module "route_table_association" {
+  for_each = { for rta in var.rta : rta.subnet => rta }
+  source   = "../modules/network/"
+  rta      = each.value
+  depends_on = [
+    module.subnet,
+    module.internet_gateway,
+    module.nat_gateway,
+    module.route_table
+  ]
+}
 
-# module "security_group" {
-#   for_each = { for sg in var.sg : sg.name => sg }
-#   source   = "../modules/network/"
-#   sg       = each.value
-#   depends_on = [
-#     module.vpc
-#   ]
-# }
+module "security_group" {
+  for_each = { for sg in var.sg : sg.name => sg }
+  source   = "../modules/network/"
+  sg       = each.value
+  depends_on = [
+    module.vpc
+  ]
+}
 
-# # this module needs the security group id !!!
-# # Using the "All trafic" option doesn't work some time!!!!
-# # Try specifing the actual port you wanna access (e.g. 443, 80)!!!
-# module "security_group_rule" {
-#   for_each = { for sgr in var.sgr : sgr.description => sgr }
-#   source   = "../modules/network/"
-#   sgr      = each.value
-#   depends_on = [
-#     module.security_group
-#   ]
-# }
+# this module needs the security group id !!!
+# Using the "All trafic" option doesn't work some time!!!!
+# Try specifing the actual port you wanna access (e.g. 443, 80)!!!
+module "security_group_rule" {
+  for_each = { for sgr in var.sgr : sgr.description => sgr }
+  source   = "../modules/network/"
+  sgr      = each.value
+  depends_on = [
+    module.security_group
+  ]
+}
 
 # module "iam_role" {
 #   for_each = { for iam_role in var.iam_role : iam_role.name => iam_role }

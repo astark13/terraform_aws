@@ -72,8 +72,8 @@ variable "ig" {
     object({
       # if using data source for vpc_id, 
       # provide vpc tag "Name", else provide vpc_id directly
-      vpc    = string
-      tags   = map(string)
+      vpc  = string
+      tags = map(string)
     })
   )
 }
@@ -116,8 +116,8 @@ variable "rt" {
     object({
       # if using data source for vpc_id, 
       # provide vpc tag "Name", else provide vpc_id directly
-      vpc    = string
-      tags   = map(string)
+      vpc  = string
+      tags = map(string)
     })
   )
 }
@@ -143,7 +143,7 @@ variable "rt_ngw_r" {
       rt                     = string
       destination_cidr_block = string
       #destination_type       = string
-      destination_name       = string
+      destination_name = string
     })
   )
 }
@@ -157,7 +157,7 @@ variable "rt_igw_r" {
       rt                     = string
       destination_cidr_block = string
       #destination_type       = string
-      destination_name       = string
+      destination_name = string
     })
   )
 }
@@ -179,8 +179,11 @@ variable "rt_igw_r" {
 variable "rta" {
   type = list(
     object({
-      subnet_id      = string
-      route_table_id = string
+      # if using data source for subnet_id/route_table_id, 
+      # provide subnet/route_table tag "Name", else provide subnet_id/route_table_id
+      subnet      = string
+      #subnet_id   = string
+      route_table = string
     })
   )
 }
@@ -189,9 +192,13 @@ variable "rta" {
 variable "sg" {
   type = list(
     object({
+      # if using data source for vpc_id, 
+      # provide vpc tag "Name", else provide vpc_id
       name        = string
       description = string
-      vpc_id      = string
+      vpc         = string
+      #vpc_id      = string
+      tags = map(string)
     })
   )
 }
@@ -206,7 +213,8 @@ variable "sgr" {
       to_port           = number
       protocol          = string
       cidr_block        = list(string)
-      security_group_id = string
+      security_group    = string
+      # security_group_id = string
     })
   )
 }

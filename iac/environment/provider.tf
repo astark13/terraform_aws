@@ -9,7 +9,7 @@ terraform {
 
 # configure the aws provider
 provider "aws" {
-  region     = var.aws_region
+  region                   = var.aws_region
   shared_credentials_files = ["/home/stark/.aws/credentials"]
   default_tags {
     tags = {
