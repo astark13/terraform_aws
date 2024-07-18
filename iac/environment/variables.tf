@@ -181,7 +181,7 @@ variable "rta" {
     object({
       # if using data source for subnet_id/route_table_id, 
       # provide subnet/route_table tag "Name", else provide subnet_id/route_table_id
-      subnet      = string
+      subnet = string
       #subnet_id   = string
       route_table = string
     })
@@ -207,13 +207,13 @@ variable "sg" {
 variable "sgr" {
   type = list(
     object({
-      description       = string
-      type              = string
-      from_port         = number
-      to_port           = number
-      protocol          = string
-      cidr_block        = list(string)
-      security_group    = string
+      description    = string
+      type           = string
+      from_port      = number
+      to_port        = number
+      protocol       = string
+      cidr_block     = list(string)
+      security_group = string
       # security_group_id = string
     })
   )
@@ -263,7 +263,8 @@ variable "launch_template" {
       name                   = string
       image_id               = string
       instance_type          = string
-      vpc_security_group_ids = set(string)
+      vpc_security_group     = set(string)
+      # vpc_security_group_ids = set(string)
       iam_instance_profile   = string
       user_data              = string
       tag_specifications = list(

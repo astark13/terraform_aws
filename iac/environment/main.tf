@@ -133,11 +133,11 @@ module "security_group_rule" {
   ]
 }
 
-# module "iam_role" {
-#   for_each = { for iam_role in var.iam_role : iam_role.name => iam_role }
-#   source   = "../modules/iam/"
-#   iam_role = each.value
-# }
+module "iam_role" {
+  for_each = { for iam_role in var.iam_role : iam_role.name => iam_role }
+  source   = "../modules/iam/"
+  iam_role = each.value
+}
 
 # # # module "iam_rpa" {
 # # #   for_each = { for iam_rpa in var.iam_rpa : iam_rpa.role => iam_rpa }
@@ -148,36 +148,36 @@ module "security_group_rule" {
 # # #   ]
 # # # }
 
-# resource "aws_iam_role_policy_attachment" "test-attach" {
-#   for_each   = var.iam_rpa.policy_arn
-#   role       = var.iam_rpa.role
-#   policy_arn = each.value
-#   depends_on = [module.iam_role]
-# }
+resource "aws_iam_role_policy_attachment" "test-attach" {
+  for_each   = var.iam_rpa.policy_arn
+  role       = var.iam_rpa.role
+  policy_arn = each.value
+  depends_on = [module.iam_role]
+}
 
-# # iam_instance_profile
-# module "iam_i_p" {
-#   for_each = { for iam_i_p in var.iam_i_p : iam_i_p.name => iam_i_p }
-#   source   = "../modules/iam/"
-#   iam_i_p  = each.value
-#   depends_on = [
-#     module.iam_role
-#   ]
-# }
+# iam_instance_profile
+module "iam_i_p" {
+  for_each = { for iam_i_p in var.iam_i_p : iam_i_p.name => iam_i_p }
+  source   = "../modules/iam/"
+  iam_i_p  = each.value
+  depends_on = [
+    module.iam_role
+  ]
+}
 
-# # if you want to assign a role to an EC2 instance,
-# # you need to create a "iam_instance_profile" first!!!
-# # Create an EC2 instance manually and check if everything is fine 
-# #(e.g. test the ami to if if SSM works )
-# module "launch_template" {
-#   for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
-#   source          = "../modules/compute/"
-#   launch_template = each.value
-#   depends_on = [
-#     module.security_group,
-#     module.iam_i_p
-#   ]
-# }
+# if you want to assign a role to an EC2 instance,
+# you need to create a "iam_instance_profile" first!!!
+# Create an EC2 instance manually and check if everything is fine 
+#(e.g. test the ami to if if SSM works )
+module "launch_template" {
+  for_each        = { for launch_template in var.launch_template : launch_template.name => launch_template }
+  source          = "../modules/compute/"
+  launch_template = each.value
+  depends_on = [
+    module.security_group,
+    module.iam_i_p
+  ]
+}
 
 # module "loadbalancer_target_group" {
 #   for_each = { for lb_tg in var.lb_tg : lb_tg.name => lb_tg }
