@@ -179,11 +179,14 @@ module "launch_template" {
   ]
 }
 
-# module "loadbalancer_target_group" {
-#   for_each = { for lb_tg in var.lb_tg : lb_tg.name => lb_tg }
-#   source   = "../modules/compute/"
-#   lb_tg    = each.value
-# }
+module "loadbalancer_target_group" {
+  for_each = { for lb_tg in var.lb_tg : lb_tg.name => lb_tg }
+  source   = "../modules/compute/"
+  lb_tg    = each.value
+  depends_on = [
+    module.vpc
+  ]
+}
 
 # # install "stress"
 # # https://cloudkatha.com/how-to-install-stress-on-amazon-linux-2023/?utm_content=cmp-true

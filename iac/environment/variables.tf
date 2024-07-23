@@ -260,13 +260,13 @@ variable "iam_i_p" {
 variable "launch_template" {
   type = list(
     object({
-      name                   = string
-      image_id               = string
-      instance_type          = string
-      vpc_security_group     = set(string)
-      # vpc_security_group_ids = set(string)
-      iam_instance_profile   = string
-      user_data              = string
+      name               = string
+      image_id           = string
+      instance_type      = string
+      vpc_security_group = set(string)
+      #vpc_security_group_ids = set(string)
+      iam_instance_profile = string
+      user_data            = string
       tag_specifications = list(
         object({
           # tags to apply to the resources during launch
@@ -283,12 +283,15 @@ variable "launch_template" {
 variable "lb_tg" {
   type = list(
     object({
+      # if using data source for vpc_id, 
+      # provide vpc tag "Name", else provide vpc_id
       name = string
       #target_type = string
       port     = number
       protocol = string
-      vpc_id   = string
-      tags     = map(string)
+      vpc      = string
+      #vpc_id   = string
+      tags = map(string)
     })
   )
 }

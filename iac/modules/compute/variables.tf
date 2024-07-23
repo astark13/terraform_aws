@@ -46,7 +46,8 @@ variable "lb_tg" {
     #target_type = string
     port        = number
     protocol    = string
-    vpc_id      = string
+    vpc         = string
+    #vpc_id      = string
     tags        = map(string)
   })
   default = null

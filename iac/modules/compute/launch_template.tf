@@ -25,18 +25,31 @@
 # of the desired architecture in a SINGLE "terraform apply"
 ##################################
 
+# data "aws_security_group" "lt" {
+#   for_each = var.launch_template.vpc_security_group
+#   tags  = {
+#     Name = each.key
+#   }
+# }
+
 data "aws_security_group" "lt" {
-  for_each = var.launch_template.vpc_security_group
-  tags  = {
-    Name = "${each.key}"
+  for_each = toset(var.launch_template != null ? var.launch_template.vpc_security_group : [])
+
+  tags = {
+    Name = each.key
   }
 }
 
+# locals {
+#   security_group_ids = [for vpc_security_group in data.aws_security_group.lt : vpc_security_group.id]
+# }
+
 locals {
-  security_group_ids = [for vpc_security_group in data.aws_security_group.lt : vpc_security_group.id]
+  security_group_ids = var.launch_template != null ? [for vpc_security_group in data.aws_security_group.lt : vpc_security_group.id] : []
 }
 
 resource "aws_launch_template" "launch_template" {
+  count                  = var.launch_template == null ? 0 : 1
   name                   = var.launch_template.name
   image_id               = var.launch_template.image_id
   instance_type          = var.launch_template.instance_type
