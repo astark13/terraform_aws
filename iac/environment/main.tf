@@ -188,17 +188,19 @@ module "loadbalancer_target_group" {
   ]
 }
 
-# # install "stress"
-# # https://cloudkatha.com/how-to-install-stress-on-amazon-linux-2023/?utm_content=cmp-true
-# module "autoscaling_group" {
-#   for_each = { for asg in var.asg : asg.name => asg }
-#   source   = "../modules/compute/"
-#   asg      = each.value
-#   depends_on = [
-#     module.route_table_association,
-#     module.launch_template
-#   ]
-# }
+# install "stress"
+# https://cloudkatha.com/how-to-install-stress-on-amazon-linux-2023/?utm_content=cmp-true
+module "autoscaling_group" {
+  for_each = { for asg in var.asg : asg.name => asg }
+  source   = "../modules/compute/"
+  asg      = each.value
+  depends_on = [
+    module.subnet,
+    module.route_table_association,
+    module.loadbalancer_target_group,
+    module.launch_template
+  ]
+}
 
 # resource "aws_autoscaling_policy" "bat" {
 #   name                   = var.asgplc.name

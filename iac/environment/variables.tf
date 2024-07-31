@@ -300,14 +300,17 @@ variable "lb_tg" {
 variable "asg" {
   type = list(
     object({
-      name = string
+      name    = string
+      subnets = list(string)
       # id's of subnets in which EC2 instances will reside 
-      vpc_zone_identifier = list(string)
-      desired_capacity    = number
-      max_size            = number
-      min_size            = number
-      target_group_arns   = set(string)
-      launch_template_id  = string
+      #vpc_zone_identifier = list(string)
+      desired_capacity   = number
+      max_size           = number
+      min_size           = number
+      target_group_names = set(string)
+      # target_group_arns   = set(string)
+      launch_template_name = string
+      # launch_template_id   = string
       tag = list(
         object({
           key                 = string

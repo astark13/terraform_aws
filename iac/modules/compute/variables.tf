@@ -56,13 +56,16 @@ variable "lb_tg" {
 # autoscaling_group
 variable "asg" {
   type = object({
-    name                = string
-    vpc_zone_identifier = list(string)
-    desired_capacity    = number
-    max_size            = number
-    min_size            = number
-    target_group_arns   = set(string)
-    launch_template_id  = string
+    name                 = string
+    #vpc_zone_identifier = list(string)
+    subnets              = list(string)
+    desired_capacity     = number
+    max_size             = number
+    min_size             = number
+    target_group_names   = set(string)
+    #target_group_arns   = set(string)
+    launch_template_name = string
+    #launch_template_id   = string
     tag = list(
       object({
         key                 = string
