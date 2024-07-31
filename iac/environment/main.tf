@@ -122,8 +122,8 @@ module "security_group" {
 }
 
 # this module needs the security group id !!!
-# Using the "All trafic" option doesn't work some time!!!!
-# Try specifing the actual port you wanna access (e.g. 443, 80)!!!
+# Using the "All trafic" option doesn't work sometimes!!!!
+# Try specifing the actual port you wanna access (e.g. 443)!!!
 module "security_group_rule" {
   for_each = { for sgr in var.sgr : sgr.description => sgr }
   source   = "../modules/network/"
