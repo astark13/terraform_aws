@@ -322,32 +322,18 @@ variable "asg" {
   )
 }
 
-# # # autoscaling group policy
-# # variable "asgplc" {
-# #   type = list(
-# #     object({
-# #     name                   = string
-# #     policy_type            = string
-# #     scaling_adjustment     = number
-# #     adjustment_type        = string
-# #     cooldown               = number
-# #     autoscaling_group_name = string
-# #     predefined_metric_type = string
-# #     target_value           = number
-# #     })
-# #   )  
-# # }
-
 # autoscaling group policy
 variable "asgplc" {
-  type = object({
-    name                   = string
-    policy_type            = string
-    adjustment_type        = string
-    autoscaling_group_name = string
-    predefined_metric_type = string
-    target_value           = number
-  })
+  type = list(
+    object({
+      name                   = string
+      policy_type            = string
+      adjustment_type        = string
+      autoscaling_group_name = string
+      predefined_metric_type = string
+      target_value           = number
+    })
+  )
 }
 
 # loadbalancer

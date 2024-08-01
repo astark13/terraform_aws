@@ -21,19 +21,18 @@
 #                           A positive value increases the capacity and a negative value decreases the capacity. 
 #                           For example: If the current capacity is 10 and the adjustment is 10 percent, then when this policy is performed, we add 1 capacity unit to the capacity for a total of 11 capacity units. 
 
-# resource "aws_autoscaling_policy" "bat" {
-#   name                   = var.asgplc.name
-#   policy_type            = var.asgplc.policy_type        
-#   scaling_adjustment     = var.asgplc.scaling_adjustment 
-#   adjustment_type        = var.asgplc.adjustment_type    
-#   cooldown               = var.asgplc.cooldown           
-#   autoscaling_group_name = var.asgplc.autoscaling_group_name
-#   target_tracking_configuration {
-#     predefined_metric_specification {
-#       # Valid values are: ASGTotalCPUUtilization, ASGTotalNetworkIn,
-#       # ASGTotalNetworkOut, ALBTargetGroupRequestCount
-#       predefined_metric_type = var.asgplc.predefined_metric_type  
-#     }
-#   target_value = var.asgplc.target_value                        
-#   }
-# }
+resource "aws_autoscaling_policy" "bat" {
+  count                  = var.asgplc == null ? 0 : 1  
+  name                   = var.asgplc.name
+  policy_type            = var.asgplc.policy_type        
+  adjustment_type        = var.asgplc.adjustment_type    
+  autoscaling_group_name = var.asgplc.autoscaling_group_name
+  target_tracking_configuration {
+    predefined_metric_specification {
+      # Valid values are: ASGTotalCPUUtilization, ASGTotalNetworkIn,
+      # ASGTotalNetworkOut, ALBTargetGroupRequestCount
+      predefined_metric_type = var.asgplc.predefined_metric_type  
+    }
+  target_value = var.asgplc.target_value                        
+  }
+}

@@ -202,20 +202,14 @@ module "autoscaling_group" {
   ]
 }
 
-# resource "aws_autoscaling_policy" "bat" {
-#   name                   = var.asgplc.name
-#   policy_type            = var.asgplc.policy_type        
-#   adjustment_type        = var.asgplc.adjustment_type         
-#   autoscaling_group_name = var.asgplc.autoscaling_group_name
-#   target_tracking_configuration {
-#     predefined_metric_specification {
-#       # Valid values are: ASGTotalCPUUtilization, ASGTotalNetworkIn,
-#       # ASGTotalNetworkOut, ALBTargetGroupRequestCount
-#       predefined_metric_type = var.asgplc.predefined_metric_type  
-#     }
-#     target_value = var.asgplc.target_value                        
-#   }
-# }
+module "autoscaling_group_policy" {
+  for_each = { for asgplc in var.asgplc : asgplc.name => asgplc }
+  source   = "../modules/compute/"
+  asgplc   = each.value
+  depends_on = [
+    module.autoscaling_group
+  ]
+}
 
 # module "loadbalancer" {
 #   for_each = { for lb in var.lb : lb.name => lb }
