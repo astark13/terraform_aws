@@ -181,6 +181,35 @@ variable "sgr" {
   default = null
 }
 
+#security_group_egress_rule
+variable "sger" {
+  type = object({
+    description    = string
+    security_group = string
+    #security_group_id = string
+    cidr_ipv4      = string
+    from_port      = number
+    ip_protocol    = string
+    to_port        = number
+  })
+  default = null
+}
+
+#security_group_ingress_rule
+variable "sgir" {
+  type = object({
+    description    = string
+    security_group = string
+    #security_group_id = string
+    cidr_ipv4      = string
+    from_port      = number
+    ip_protocol    = string
+    to_port        = number
+  })
+  default = null
+}
+
+
 #main_route_table
 variable "mrt" {
   type = object({

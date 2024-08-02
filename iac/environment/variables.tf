@@ -203,18 +203,48 @@ variable "sg" {
   )
 }
 
-#security_group_rule
-variable "sgr" {
+# #security_group_rule
+# variable "sgr" {
+#   type = list(
+#     object({
+#       description    = string
+#       type           = string
+#       from_port      = number
+#       to_port        = number
+#       protocol       = string
+#       cidr_block     = list(string)
+#       security_group = string
+#       # security_group_id = string
+#     })
+#   )
+# }
+
+#security_group_egress_rule
+variable "sger" {
   type = list(
     object({
       description    = string
-      type           = string
-      from_port      = number
-      to_port        = number
-      protocol       = string
-      cidr_block     = list(string)
       security_group = string
-      # security_group_id = string
+      #security_group_id = string
+      cidr_ipv4   = string
+      from_port   = number
+      ip_protocol = string
+      to_port     = number
+    })
+  )
+}
+
+#security_group_ingress_rule
+variable "sgir" {
+  type = list(
+    object({
+      description    = string
+      security_group = string
+      #security_group_id = string
+      cidr_ipv4   = string
+      from_port   = number
+      ip_protocol = string
+      to_port     = number
     })
   )
 }

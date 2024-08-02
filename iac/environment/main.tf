@@ -121,13 +121,37 @@ module "security_group" {
   ]
 }
 
-# this module needs the security group id !!!
+# # this module needs the security group id/name !!!
+# # Using the "All trafic" option doesn't work sometimes!!!!
+# # Try specifing the actual port you wanna access (e.g. 443)!!!
+# module "security_group_rule" {
+#   for_each = { for sgr in var.sgr : sgr.description => sgr }
+#   source   = "../modules/network/"
+#   sgr      = each.value
+#   depends_on = [
+#     module.security_group
+#   ]
+# }
+
+# this module needs the security group id/name !!!
 # Using the "All trafic" option doesn't work sometimes!!!!
 # Try specifing the actual port you wanna access (e.g. 443)!!!
-module "security_group_rule" {
-  for_each = { for sgr in var.sgr : sgr.description => sgr }
+module "security_group_egress_rule" {
+  for_each = { for sger in var.sger : sger.description => sger }
   source   = "../modules/network/"
-  sgr      = each.value
+  sger     = each.value
+  depends_on = [
+    module.security_group
+  ]
+}
+
+# this module needs the security group id/name !!!
+# Using the "All trafic" option doesn't work sometimes!!!!
+# Try specifing the actual port you wanna access (e.g. 443)!!!
+module "security_group_ingress_rule" {
+  for_each = { for sgir in var.sgir : sgir.description => sgir }
+  source   = "../modules/network/"
+  sgir     = each.value
   depends_on = [
     module.security_group
   ]
