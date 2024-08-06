@@ -1,9 +1,5 @@
 aws_region = "eu-central-1"
 
-aws_access_key = "xxx"
-
-aws_secret_key = "xxx"
-
 vpc = [
   {
     cidr_block = "10.0.0.0/26"
@@ -15,7 +11,7 @@ vpc = [
 
 subnet = [
   {
-    vpc_id                  = "vpc-0bcd25237548c25d7"
+    vpc                     = "project-a-dev-vpc"
     availability_zone       = "eu-central-1a"
     newbits                 = 2
     netnum                  = 0
@@ -25,7 +21,7 @@ subnet = [
     }
   },
   {
-    vpc_id                  = "vpc-0bcd25237548c25d7"
+    vpc                     = "project-a-dev-vpc"
     availability_zone       = "eu-central-1b"
     newbits                 = 2
     netnum                  = 1
@@ -35,7 +31,7 @@ subnet = [
     }
   },
   {
-    vpc_id                  = "vpc-0bcd25237548c25d7"
+    vpc                     = "project-a-dev-vpc"
     availability_zone       = "eu-central-1a"
     newbits                 = 2
     netnum                  = 2
@@ -45,7 +41,7 @@ subnet = [
     }
   },
   {
-    vpc_id                  = "vpc-0bcd25237548c25d7"
+    vpc                     = "project-a-dev-vpc"
     availability_zone       = "eu-central-1b"
     newbits                 = 2
     netnum                  = 3
@@ -56,15 +52,17 @@ subnet = [
   }
 ]
 
+# internet_gateway
 ig = [
   {
-    vpc_id = "vpc-0bcd25237548c25d7"
+    vpc = "project-a-dev-vpc"
     tags = {
       "Name" = "project-a-dev-igw"
     }
   }
 ]
 
+# elastic_ip
 eip = [
   {
     domain = "vpc"
@@ -74,119 +72,293 @@ eip = [
   }
 ]
 
+# ngw = [
+#   {
+#     allocation_id = "eipalloc-04fc5898f33c84fc0"
+#     subnet_id     = "subnet-094706d5e8dc4927b"
+#     tags = {
+#       "Name" = "project-a-dev-ngw"
+#     }
+#   }
+# ]
+
+# nat_gateway
 ngw = [
   {
-    allocation_id = "eipalloc-04fc5898f33c84fc0"
-    subnet_id     = "subnet-094706d5e8dc4927b"
+    eip    = "project-a-dev-eip-ngw"
+    subnet = "project-a-dev-public-1b-1"
     tags = {
       "Name" = "project-a-dev-ngw"
     }
   }
 ]
 
+# rtd = [
+#   {
+#     vpc_id = "project-a-dev-vpc"
+#     route = [
+#       {
+#         cidr_block = "10.0.0.0/26"
+#         gateway_id = "local"
+#       },
+#       {
+#         cidr_block = "0.0.0.0/0"
+#         gateway_id = "nat-09b27e37c4ed87cf0"
+#       }
+#     ]
+#     tags = {
+#       "Name" = "project-a-dev-private-rt"
+#     }
+#   },
+#   {
+#     vpc_id = "project-a-dev-vpc"
+#     route = [
+#       {
+#         cidr_block = "10.0.0.0/26"
+#         gateway_id = "local"
+#       },
+#       {
+#         cidr_block = "0.0.0.0/0"
+#         gateway_id = "igw-02f3f2b5ef35c977f"
+#       }
+#     ]
+#     tags = {
+#       "Name" = "project-a-dev-public-rt"
+#     }
+#   }
+# ]
+
+# route_table
 rt = [
   {
-    vpc_id = "vpc-0bcd25237548c25d7"
-    route = [
-      {
-        cidr_block = "10.0.0.0/26"
-        gateway_id = "local"
-      },
-      {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = "nat-09b27e37c4ed87cf0"
-      }
-    ]
+    vpc = "project-a-dev-vpc"
     tags = {
       "Name" = "project-a-dev-private-rt"
     }
   },
   {
-    vpc_id = "vpc-0bcd25237548c25d7"
-    route = [
-      {
-        cidr_block = "10.0.0.0/26"
-        gateway_id = "local"
-      },
-      {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = "igw-02f3f2b5ef35c977f"
-      }
-    ]
+    vpc = "project-a-dev-vpc"
     tags = {
       "Name" = "project-a-dev-public-rt"
     }
   }
 ]
 
-rta = [
+# route_table_local_route
+rt_l_r = [
   {
-    subnet_id      = "subnet-083dd338d5009d1b1"
-    route_table_id = "rtb-06c408873b92f6e7b"
+    rt                     = "project-a-dev-private-rt"
+    destination_cidr_block = "10.0.0.0/26"
   },
   {
-    subnet_id      = "subnet-0e624b33e24959d5d"
-    route_table_id = "rtb-06c408873b92f6e7b"
-  },
-  {
-    subnet_id      = "subnet-094706d5e8dc4927b"
-    route_table_id = "rtb-04e1b2a25e3cb7904"
-  },
-  {
-    subnet_id      = "subnet-071770daad2bbb235"
-    route_table_id = "rtb-04e1b2a25e3cb7904"
+    rt                     = "project-a-dev-public-rt"
+    destination_cidr_block = "10.0.0.0/26"
   }
 ]
 
+# route_table_ngw_route
+rt_ngw_r = [
+  {
+    rt                     = "project-a-dev-private-rt"
+    destination_cidr_block = "0.0.0.0/0"
+    #destination_type       = "aws_nat_gateway"
+    destination_name = "project-a-dev-ngw"
+  }
+]
+
+# route_table_igw_route
+rt_igw_r = [
+  {
+    rt                     = "project-a-dev-public-rt"
+    destination_cidr_block = "0.0.0.0/0"
+    #destination_type       = "aws_internet_gateway"
+    destination_name = "project-a-dev-igw"
+  }
+]
+
+# #route_table_association without data source
+# rta = [
+#   {
+#     subnet_id      = "subnet-083dd338d5009d1b1"
+#     route_table_id = "rtb-06c408873b92f6e7b"
+#   },
+#   {
+#     subnet_id      = "subnet-0e624b33e24959d5d"
+#     route_table_id = "rtb-06c408873b92f6e7b"
+#   },
+#   {
+#     subnet_id      = "subnet-094706d5e8dc4927b"
+#     route_table_id = "rtb-04e1b2a25e3cb7904"
+#   },
+#   {
+#     subnet_id      = "subnet-071770daad2bbb235"
+#     route_table_id = "rtb-04e1b2a25e3cb7904"
+#   }
+# ]
+
+#route_table_association
+rta = [
+  {
+    subnet      = "project-a-dev-private-1a-1"
+    route_table = "project-a-dev-private-rt"
+  },
+  {
+    subnet      = "project-a-dev-private-1b-1"
+    route_table = "project-a-dev-private-rt"
+  },
+  {
+    subnet      = "project-a-dev-public-1a-1"
+    route_table = "project-a-dev-public-rt"
+  },
+  {
+    subnet      = "project-a-dev-public-1b-1"
+    route_table = "project-a-dev-public-rt"
+  }
+]
+
+#security_group
 sg = [
   {
     name        = "project-a-dev-instance-sg"
     description = "SG for private subnets"
-    vpc_id      = "vpc-0bcd25237548c25d7"
+    vpc         = "project-a-dev-vpc"
+    #vpc_id         = "xxxx"
+    tags = {
+      "Name" = "project-a-dev-instance-sg"
+    }
   },
   {
     name        = "project-a-dev-elb-sg"
     description = "SG for public subnets"
-    vpc_id      = "vpc-0bcd25237548c25d7"
+    vpc         = "project-a-dev-vpc"
+    #vpc_id         = "xxxx"
+    tags = {
+      "Name" = "project-a-dev-elb-sg"
+    }
   }
 ]
 
-sgr = [
+# #security_group_rule
+# sgr = [
+#   {
+#     description    = "Allow all inbound traffic - private subnet"
+#     type           = "ingress"
+#     from_port      = 443
+#     to_port        = 443
+#     protocol       = "-1"
+#     cidr_block     = ["10.0.0.0/26"]
+#     security_group = "project-a-dev-instance-sg"
+#     #security_group_id = "sg-0d8d76cf3b292337e"
+#   },
+#   {
+#     description    = "Allow all outbound traffic - private subnet"
+#     type           = "egress"
+#     from_port      = 443
+#     to_port        = 443
+#     protocol       = "-1"
+#     cidr_block     = ["10.0.0.0/26"]
+#     security_group = "project-a-dev-instance-sg"
+#     #security_group_id = "sg-0d8d76cf3b292337e"
+#   },
+#   {
+#     description    = "Allow all inbound traffic - public subnet"
+#     type           = "ingress"
+#     from_port      = 443
+#     to_port        = 443
+#     protocol       = "-1"
+#     cidr_block     = ["10.0.0.0/26"]
+#     security_group = "project-a-dev-elb-sg"
+#     #security_group_id = "sg-02ed52317f3e8656f"
+#   },
+#   {
+#     description    = "Allow all outbound traffic - public subnet"
+#     type           = "egress"
+#     from_port      = 443
+#     to_port        = 443
+#     protocol       = "-1"
+#     cidr_block     = ["10.0.0.0/26"]
+#     security_group = "project-a-dev-elb-sg"
+#     #security_group_id = "sg-02ed52317f3e8656f"
+#   }
+# ]
+
+#security_group_egress_rule
+sger = [
   {
-    description       = "Allow all inbound traffic - private subnet"
-    type              = "ingress"
-    from_port         = 0
-    to_port           = 0
-    protocol          = "-1"
-    cidr_block        = ["10.0.0.0/26"]
-    security_group_id = "sg-0d8d76cf3b292337e"
+    description    = "Allow all outbound HTTPS traffic - private subnet"
+    security_group = "project-a-dev-instance-sg"
+    #security_group_id = "sg-02ed52317f3e8656f"
+    cidr_ipv4   = "0.0.0.0/0"
+    from_port   = 443
+    ip_protocol = "tcp"
+    to_port     = 443
   },
   {
-    description       = "Allow all outbound traffic - private subnet"
-    type              = "egress"
-    from_port         = 0
-    to_port           = 0
-    protocol          = "-1"
-    cidr_block        = ["10.0.0.0/26"]
-    security_group_id = "sg-0d8d76cf3b292337e"
+    description    = "Allow all outbound HTTPS traffic - public subnet"
+    security_group = "project-a-dev-elb-sg"
+    #security_group_id = "sg-02ed52317f3e8656f"
+    cidr_ipv4   = "0.0.0.0/0"
+    from_port   = 443
+    ip_protocol = "tcp"
+    to_port     = 443
   },
   {
-    description       = "Allow all inbound traffic - public subnet"
-    type              = "ingress"
-    from_port         = 0
-    to_port           = 0
-    protocol          = "-1"
-    cidr_block        = ["10.0.0.0/26"]
-    security_group_id = "sg-02ed52317f3e8656f"
+    description    = "Allow all outbound HTTP traffic - private subnet"
+    security_group = "project-a-dev-instance-sg"
+    #security_group_id = "sg-02ed52317f3e8656f"
+    cidr_ipv4   = "0.0.0.0/0"
+    from_port   = 80
+    ip_protocol = "tcp"
+    to_port     = 80
   },
   {
-    description       = "Allow all outbound traffic - public subnet"
-    type              = "egress"
-    from_port         = 0
-    to_port           = 0
-    protocol          = "-1"
-    cidr_block        = ["10.0.0.0/26"]
-    security_group_id = "sg-02ed52317f3e8656f"
+    description    = "Allow all outbound HTTP traffic - public subnet"
+    security_group = "project-a-dev-elb-sg"
+    #security_group_id = "sg-02ed52317f3e8656f"
+    cidr_ipv4   = "0.0.0.0/0"
+    from_port   = 80
+    ip_protocol = "tcp"
+    to_port     = 80
+  }
+]
+
+#security_group_ingress_rule
+sgir = [
+  {
+    description    = "Allow all inbound HTTPS traffic - private subnet"
+    security_group = "project-a-dev-instance-sg"
+    #security_group_id = "sg-02ed52317f3e8656f"
+    cidr_ipv4   = "0.0.0.0/0"
+    from_port   = 443
+    ip_protocol = "tcp"
+    to_port     = 443
+  },
+  {
+    description    = "Allow all inbound HTTPS traffic - public subnet"
+    security_group = "project-a-dev-elb-sg"
+    #security_group_id = "sg-02ed52317f3e8656f"
+    cidr_ipv4   = "0.0.0.0/0"
+    from_port   = 443
+    ip_protocol = "tcp"
+    to_port     = 443
+  },
+  {
+    description    = "Allow all inbound HTTP traffic - private subnet"
+    security_group = "project-a-dev-instance-sg"
+    #security_group_id = "sg-02ed52317f3e8656f"
+    cidr_ipv4   = "0.0.0.0/0"
+    from_port   = 80
+    ip_protocol = "tcp"
+    to_port     = 80
+  },
+  {
+    description    = "Allow all inbound HTTP traffic - public subnet"
+    security_group = "project-a-dev-elb-sg"
+    #security_group_id = "sg-02ed52317f3e8656f"
+    cidr_ipv4   = "0.0.0.0/0"
+    from_port   = 80
+    ip_protocol = "tcp"
+    to_port     = 80
   }
 ]
 
@@ -226,12 +398,13 @@ iam_i_p = [
 
 launch_template = [
   {
-    name                   = "AML2023_t2.micro_SMM_Apache"
-    image_id               = "ami-08188dffd130a1ac2"
-    instance_type          = "t2.micro"
-    vpc_security_group_ids = ["sg-0d8d76cf3b292337e"]
-    iam_instance_profile   = "EC2AccessToSSM-Profile"
-    user_data              = "install_apache_and_stress.sh"
+    name               = "AML2023_t2.micro_SMM_Apache"
+    image_id           = "ami-08188dffd130a1ac2"
+    instance_type      = "t2.micro"
+    vpc_security_group = ["project-a-dev-instance-sg", "project-a-dev-elb-sg"]
+    #vpc_security_group_ids = ["sg-07138d8580d9e7723"]
+    iam_instance_profile = "EC2AccessToSSM-Profile"
+    user_data            = "install_apache_and_stress.sh"
     tag_specifications = [
       {
         resource_type = "instance"
@@ -249,7 +422,8 @@ lb_tg = [
     name     = "project-a-dev-alb-tg"
     port     = 80
     protocol = "HTTP"
-    vpc_id   = "vpc-0bcd25237548c25d7"
+    vpc      = "project-a-dev-vpc"
+    #vpc_id   = "vpc-0bcd25237548c25d7"
     tags = {
       "Name" = "Target group for ALB"
     }
@@ -259,45 +433,60 @@ lb_tg = [
 # autoscaling_group
 asg = [
   {
+    name = "Apache_ASG"
+    subnets = [
+      "project-a-dev-private-1a-1",
+      "project-a-dev-private-1b-1"
+    ]
     desired_capacity   = 2
-    launch_template_id = "lt-04f95c0d2df8d0b5d"
     max_size           = 4
     min_size           = 2
-    name               = "Apache_ASG"
+    target_group_names = ["project-a-dev-alb-tg"]
+    # target_group_arns = ["arn:aws:elasticloadbalancing:eu-central-1:637423575860:targetgroup/project-a-dev-alb-tg/f17dae90804b0aec"]
+    launch_template_name = "AML2023_t2.micro_SMM_Apache"
+    # launch_template_id = "lt-04f95c0d2df8d0b5d"
     tag = [{
       key                 = "Name"
       propagate_at_launch = true
       value               = "project-a-dev-apache"
     }]
-    target_group_arns = ["arn:aws:elasticloadbalancing:eu-central-1:637423575860:targetgroup/project-a-dev-alb-tg/f17dae90804b0aec"]
-    vpc_zone_identifier = [
-      "subnet-083dd338d5009d1b1",
-      "subnet-0e624b33e24959d5d"
-    ]
+
+
+    # vpc_zone_identifier = [
+    #   "subnet-083dd338d5009d1b1",
+    #   "subnet-0e624b33e24959d5d"
+    # ]
   }
 ]
 
 # autoscaling_policy
-asgplc = {
-  name                   = "TargetTrackingScaling-policy"
-  policy_type            = "TargetTrackingScaling"
-  adjustment_type        = "ChangeInCapacity"
-  autoscaling_group_name = "Apache_ASG"
-  predefined_metric_type = "ASGAverageCPUUtilization"
-  target_value           = 50
-}
+asgplc = [
+  {
+    name                   = "TargetTrackingScaling-policy"
+    policy_type            = "TargetTrackingScaling"
+    adjustment_type        = "ChangeInCapacity"
+    autoscaling_group_name = "Apache_ASG"
+    predefined_metric_type = "ASGAverageCPUUtilization"
+    target_value           = 50.0
+  }
+]
 
 # loadbalancer
 lb = [
   {
-    name               = "project-a-dev-elb"
-    internal           = false
-    load_balancer_type = "application"
-    security_groups    = ["sg-02ed52317f3e8656f"]
-    subnets            = [
-      "subnet-094706d5e8dc4927b",
-      "subnet-071770daad2bbb235"
+    name                 = "project-a-dev-elb"
+    internal             = false
+    load_balancer_type   = "application"
+    security_group_names = ["project-a-dev-elb-sg"]
+    # security_groups    = ["project-a-dev-elb-sg"]
+    subnet_names = [
+      "project-a-dev-public-1a-1",
+      "project-a-dev-public-1b-1"
     ]
+    # subnets = [
+    #   "project-a-dev-public-1a-1",
+    #   "project-a-dev-public-1b-1"
+    # ]
     # access_logs = object({
     #   s3_bucket              = string
     #   s3_prefix              = string
@@ -312,11 +501,13 @@ lb = [
 # loadbalancer listener
 lb_listener = [
   {
-    load_balancer_arn = "arn:aws:elasticloadbalancing:eu-central-1:637423575860:loadbalancer/app/project-a-dev-elb/015e517171ef7bf2"
+    load_balancer_name = "project-a-dev-elb"
+    # load_balancer_arn = "arn:aws:elasticloadbalancing:eu-central-1:637423575860:loadbalancer/app/project-a-dev-elb/015e517171ef7bf2"
     port              = 80
     protocol          = "HTTP"
     action_type       = "forward"
-    target_group_arn  = "arn:aws:elasticloadbalancing:eu-central-1:637423575860:targetgroup/project-a-dev-alb-tg/f17dae90804b0aec"
+    target_group_name = "project-a-dev-alb-tg"
+    # target_group_arn  = "arn:aws:elasticloadbalancing:eu-central-1:637423575860:targetgroup/project-a-dev-alb-tg/f17dae90804b0aec"
     tags = {
       "Name" = "project-a-dev-elb-listener"
     }

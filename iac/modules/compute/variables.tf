@@ -93,17 +93,19 @@ variable "asgplc" {
 # loadbalancer
 variable "lb" {
   type = object({
-    name               = string
-    internal           = bool
-    load_balancer_type = string
-    security_groups    = list(string)
-    subnets            = list(string)
+    name                  = string
+    internal              = bool
+    load_balancer_type    = string
+    security_group_names  = list(string)
+    # security_groups       = list(string)
+    subnet_names          = list(string)
+    # subnets               = list(string)
     # access_logs = object({
     #   s3_bucket              = string
     #   s3_prefix              = string
     #   s3_access_logs_enabled = bool
     # })
-    tags               = map(string)
+    tags                  = map(string)
   })
   default = null
 }
@@ -111,12 +113,14 @@ variable "lb" {
 # loadbalancer listener
 variable "lb_listener" {
   type = object({
-    load_balancer_arn = string
-    port              = number
-    protocol          = string
-    action_type       = string
-    target_group_arn  = string
-    tags              = map(string)
+    load_balancer_name  = string
+    # load_balancer_arn = string
+    port                = number
+    protocol            = string
+    action_type         = string
+    target_group_name   = string
+    # target_group_arn   = string
+    tags                = map(string)
   })
   default = null
 }
