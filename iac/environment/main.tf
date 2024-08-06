@@ -235,25 +235,25 @@ module "autoscaling_group_policy" {
   ]
 }
 
-# module "loadbalancer" {
-#   for_each = { for lb in var.lb : lb.name => lb }
-#   source   = "../modules/compute/"
-#   lb       = each.value
-#   depends_on = [
-#     module.security_group,
-#     module.subnet
-#   ]
-# }
+module "loadbalancer" {
+  for_each = { for lb in var.lb : lb.name => lb }
+  source   = "../modules/compute/"
+  lb       = each.value
+  depends_on = [
+    module.security_group,
+    module.subnet
+  ]
+}
 
-# module "loadbalancer_listener" {
-#   for_each    = { for lb_listener in var.lb_listener : lb_listener.tags.Name => lb_listener }
-#   source      = "../modules/compute/"
-#   lb_listener = each.value
-#   depends_on = [
-#     module.loadbalancer,
-#     module.loadbalancer_target_group
-#   ]
-# }
+module "loadbalancer_listener" {
+  for_each    = { for lb_listener in var.lb_listener : lb_listener.tags.Name => lb_listener }
+  source      = "../modules/compute/"
+  lb_listener = each.value
+  depends_on = [
+    module.loadbalancer,
+    module.loadbalancer_target_group
+  ]
+}
 
 # # # ##################################
 
